@@ -2,7 +2,7 @@
 Joshua Chamberlain and Andy Lum
 
 ## Description
-Welcome to the GitHub repository for our senior design class project! Our project aims to construct an interactive dashboard to visualize and retrieve solar irradiance data collected at the West Tennessee Solar Farm near Stanton, Tennessee.
+Welcome to the GitHub repository for our senior design class project! Our project aims to construct an interactive dashboard to visualize and retrieve solar irradiance data collected at the West Tennessee Solar Farm in Stanton, Tennessee.
 The University of Tennessee Research Foundation is interested in revitalizing this site due to its proximity to the new Ford plant. Currently, the interactive dashboard located on the Farm’s website does not work. We plan to make use of
 R, Shiny, Python, and SQL. The plan is to use simulated solar irradiance data and a hypothetical layout of sensors at the plant. Overall, we will make use of Python to simulate real-time data collection and use R and Shiny to create the dashboard. This dashboard will then be incorporated into a dedicated website, ensuring its widespread availability to the general public.
 
