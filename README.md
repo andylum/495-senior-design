@@ -39,3 +39,14 @@ R, Shiny, Python, and SQL. The plan is to use simulated solar irradiance data an
   - Hosts a web server to allow users from all major operating systems to be able to access the dashboard.
 * __Google Cloud Console__
   - Safeguards API information for enhanced data security.
+
+## Goals
+* Establish a streamlined data flow from the mySQL server to the python code, then to the Google Drive in CSV format, and finally to the R-shiny dashboard, ensuring efficiency and a cohesive data pipeline.
+* Establish a robust and automated mechanism within the Python script that consistently updates the Google Drive CSV file at defined intervals. This process ensures accurate representation of real-time sensor data changes while incorporating error-handling mechanisms to effectively handle potential issues that might arise during updates.
+* Implement a R-Shiny Dashboard that encompasses all of the aforementioned functionalities.
+* Develop a webpage that ensures accessibility across a variety of major operating systems on laptops, making it available and user-friendly for all users.
+
+## Stretch Goals
+* Incorporate a video tutorial that effectively guides a user through the dashboard’s navigation process.
+* Comparison of data from multiple sensors by enabling users to select two or more sensors and generate individual graphs for each of the chosen sensors side-by-side.
+* Allow integration of external APIs to provide more real time location data. For example, using a weather API to display what type of weather conditions are over each sensor.
