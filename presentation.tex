@@ -1,0 +1,199 @@
+\documentclass[xcolor=table]{beamer}
+
+\usetheme[secheader,compress]{Madrid} %Primary theme
+
+\usepackage{verbatim}
+\usepackage{graphicx}
+
+%% UTM Colors
+\definecolor{UTMblue}{rgb}{0.043137, 0.137254, 0.254901}
+\definecolor{UTMorange}{rgb}{1.0, 0.509803, 0}
+
+\setbeamercolor{palette primary}{bg=UTMblue,fg=white}
+\setbeamercolor{palette secondary}{bg=UTMblue,fg=white}
+\setbeamercolor{palette tertiary}{bg=UTMblue,fg=white}
+\setbeamercolor{palette quaternary}{bg=UTMblue,fg=white}
+\setbeamercolor{structure}{fg=UTMblue} % itemize, enumerate, etc
+\setbeamercolor{section in toc}{fg=UTMblue} % TOC sections
+\setbeamercolor{title}{fg=UTMorange}
+\setbeamercolor{subsection in head/foot}{bg=UTMorange,fg=white}
+
+
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.33\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+      \usebeamerfont{author in head/foot} J.~Chamberlain \& A.~Lum
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.44\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+      \usebeamerfont{title in head/foot}%
+      \parbox{\linewidth}{\centering Revitalizing Solar Insights: A Dashboard for WTSF}
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.23\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+      \usebeamerfont{date in head/foot} \insertdate \hspace*{1em} \insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+    \end{beamercolorbox}%
+  }%
+  \vskip0pt%
+}
+
+
+%\setbeamertemplate{footline}
+%%%%%%%%%%% BEGIN MACROS %%%%%%%%%%%%%%%%%%
+% frameT: Frame with title
+\newcommand{\frameT}[2]{\frame{\frametitle{#1} #2}}
+
+% frameF: Fragile frame with title
+\newcommand{\frameF}[2]{
+  \begin{frame}[fragile]
+    \frametitle{#1}
+    #2
+  \end{frame}
+}
+
+% frameTop: Frame aligned t the top
+\newcommand{\frameTop}[2]{\frame[t]{\frametitle{#1} #2}}
+
+
+\newcommand{\tab}{\hspace{1cm}}
+
+\newcommand{\spaceor}{\hspace{5pt} \textbf{or} \hspace{5pt}}
+
+%%%%%%%%%%% END MACROS %%%%%%%%%%%%%%%%%%%%
+
+
+
+\begin{document}
+
+\title{Revitalizing Solar Insights: A Dashboard for West Tennessee Solar Farm}
+
+\author{Joshua Chamberlain \& Andy Lum}
+\institute{UT Martin}
+\date{\today}
+
+%%%%%%%%%%% BEGIN TITLE %%%%%%%%%%%%%%%%%%
+\frame{\titlepage}
+
+ %\section{Outline}
+%%%%%%%%%%%% END TITLE  %%%%%%%%%%%%%%%%%%
+
+
+\section{Introduction}
+\frameT{Motivation} {
+  %List some of your motivations here!
+  %\bigskip
+  \begin{enumerate}
+    \item \textbf{Ford Plant Proximity}: Highlighting the solar farm's proximity to the new Ford plant can emphasize the importance of sustainable energy sources in modern industrial processes.
+      \bigskip
+    \item \textbf{Revitalization of a Local Site}: The University of Tennessee Research Foundation's interest in revitalizing the West Tennessee Solar Farm presents an opportunity for our project to directly contribute to local economic growth. 
+  \end{enumerate}
+
+  \bigskip
+  
+  %One or more slides of \emph{background} or %\emph{motivation}.
+}
+
+\frameT{Project Goals} {
+  \begin{enumerate}
+      \item Efficient data pipeline: MySQL to Python to Google Drive CSV to R-Shiny.
+      \item Automated Python script updates Google Drive CSV with error handling.
+      \item Implement a R-Shiny Dashboard that encompasses all of the aforementioned functionalities.
+      \item Inclusive webpage for diverse laptop OS users
+
+        \bigskip
+      \emph{Note: add stretch goals}
+  \end{enumerate}
+}
+
+\section{Technologies Used}
+
+\frameT{List of Technologies}{
+}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Technologies Continued}
+\begin{verbatim}
+Verbatim is a great way of enumerating code/algorithmic ideas.
+\end{verbatim}
+\end{frame}
+
+\section{R-Shiny}
+\frameT{Leaflet Map of Solar Farm} {
+  %% \includegraphics[width=.7\linewidth]{figures/image.pdf}
+}
+
+
+\begin{frame}[fragile]
+  \frametitle{Irradiance Plots}
+  \begin{figure}[ht]
+    \begin{minipage}[b]{0.53\linewidth}
+      \centering
+      Minipages are a great way to
+    \end{minipage}
+    \hspace{0.5cm}
+    \begin{minipage}[b]{0.4\linewidth}
+      \centering
+      Line up side-by-side content.
+
+    \end{minipage}
+  \end{figure}
+  
+\end{frame}
+
+\section{Results}
+\frameT{Results} {
+  Describe any results of your work here.
+
+  \bigskip
+
+  Things that worked?
+
+  \bigskip
+
+  Things that didn't work?
+}
+\section{Conclusion}
+\frameT{Conclusions} {
+  Some bullet points here to wrap things up.
+}
+\section{Contact Information}
+\frameT{Any Questions?} {
+  
+  \begin{center}
+    Questions?
+  \end{center}
+  \begin{center}
+    Comments?
+  \end{center}
+
+  \bigskip
+
+  \textbf{Joshua Chamberlain}: \href{mailto:joshpcham@ut.utm.edu}{joshpcham@ut.utm.edu}.
+  \bigskip
+  
+  \textbf{Andy Lum}: \href{mailto:andylum77@yahoo.com}{andylum77@yahoo.com}.
+  \begin{center}
+    %\includegraphics[width=4cm]%{figures/6AnLddq.png}
+  \end{center}
+}
+
+%\frameF{fragile test} {
+%}
+
+%% \frameF{Prolog Family Tree} {
+%% \begin{verbatim}
+%% hello
+%% \end{verbatim}
+
+
+
+%% }
+
+%Empty Page
+%\frameT{Frame 1}{
+%}  
+
+
+\end{document}
