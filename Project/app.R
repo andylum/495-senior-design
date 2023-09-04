@@ -35,7 +35,7 @@ server <- function(input, output, session) {
   }
   
   csv_data <- reactivePoll(
-    intervalMillis = 10000,  # Update interval in milliseconds (60 seconds)
+    intervalMillis = 100,  # Update interval in milliseconds 
     session = session,
     checkFunc = function() {
       Sys.time()  # Always return current time to trigger updates
@@ -58,11 +58,12 @@ server <- function(input, output, session) {
                    lng2 = -89.389436, lat2 = 35.40926) %>%
       addCircleMarkers(lng = -89.390113, lat = 35.407478, popup = "Marker 1") %>%
       addCircleMarkers(lng = -89.391825, lat = 35.408833, popup = "Marker 2") %>%
-      addCircleMarkers(lng = -89.392344, lat = 35.409811, popup = "Marker 3") %>%
-      addCircleMarkers(lng = -89.392472, lat = 35.410803, popup = "Marker 4") %>%
-      addCircleMarkers(lng = -89.389521, lat = 35.411284, popup = "Marker 5") %>%
-      addCircleMarkers(lng = -89.386922, lat = 35.409485, popup = "Marker 6") %>%
-      addCircleMarkers(lng = -89.388013, lat = 35.408433, popup = "Marker 7")
+      addCircleMarkers(lng = -89.391935, lat = 35.409777, popup = "Marker 3") %>%
+      addCircleMarkers(lng = -89.391956, lat = 35.410766, popup = "Marker 4") %>%
+      addCircleMarkers(lng = -89.392733, lat = 35.409819, popup = "Marker 5") %>%
+      addCircleMarkers(lng = -89.389521, lat = 35.411284, popup = "Marker 6") %>%
+      addCircleMarkers(lng = -89.386922, lat = 35.409485, popup = "Marker 7") %>%
+      addCircleMarkers(lng = -89.388013, lat = 35.408433, popup = "Marker 8")
   })
   
   output$sensorPlot <- renderPlot({
@@ -72,7 +73,7 @@ server <- function(input, output, session) {
          xlab = "Time",
          ylab = "Sensor 1 Irradiance",
          main = "Sensor 1 Plot",
-         xlim = c(1, length(sensorData)), ylim = c(min(sensorData), max(sensorData)))
+         xlim = c(1, 1440), ylim = c(-10, max(550, max(sensorData + 10))))
   })
 }
 
