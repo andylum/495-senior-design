@@ -17,20 +17,24 @@ ui <- fluidPage(
     h1("West Tennessee Solar Farm Dashboard", align = "center"),
     windowTitle = "West Tennessee Solar Farm Dashboard"
   ),
-  fluidRow(
-    column(width = 5,  # Adjust the width as needed
-           leafletOutput("map", width = "100%", height = "50vh")
-           ),
-    column(width = 5, 
-           tabsetPanel(
-             id = "Sensor Tabs",
-             tabPanel("Live Data",
-                      plotOutput("clickedSensorPlot")
-                      ),
-             tabPanel("Daily Data")
-           ),
+    fluidRow(
+      column(width = 5,  # Adjust the width as needed
+             leafletOutput("map", width = "100%", height = "50vh")
+             ),
+      column(width = 7, 
+             navlistPanel(
+               id = "Sensor Tabs",
+               tabPanel("Live Data",
+                        plotOutput("clickedSensorPlot")
+                        ),
+               tabPanel("Daily Data",
+                        dateInput("Date", "Start Date:", value = "2023-09-08", 
+                                  min = "2023-09-08"),
+                        plotOutput("dailySensorIrradiancePlot")
+                        )
+            ),
+      )
     )
-  )
 )
 
 server <- function(input, output, session) {
@@ -82,7 +86,7 @@ server <- function(input, output, session) {
     for (i in 1:10) {
       column_name <- paste0("Sensor.", i)
       if (column_name %in% colnames(data)) {
-        markers_data$irradiance[i] <- tail(data[, column_name], 1)
+        markers_data$irradiance[i] <- tail(data[data$DOY == 1, column_name], 1)
       }
     }
     leafletProxy("map") %>%
@@ -113,11 +117,12 @@ server <- function(input, output, session) {
   
   output$clickedSensorPlot <- renderPlot({
     data <- csv_data()
+    recent_doy <- max(data$DOY)
     if(!is.null(clicked_marker())) {
       marker_label <- clicked_marker()
       column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
       if (column_name %in% colnames(data)) {
-        sensorData <- data[, column_name]
+        sensorData <- data[data$DOY == recent_doy, column_name]
         plot(sensorData, type = "l",
              xlab = "Time",
              ylab = paste(gsub("Marker ", "", marker_label), "Irradiance"),
@@ -128,12 +133,35 @@ server <- function(input, output, session) {
       sensorData <- data[, "Sensor.1"]
       plot(sensorData, type = "l",
            xlab = "Time",
-           ylab = "Marker 1 Irradiance",
-           main = "Marker 1 Plot",
+           ylab = "Sensor 1 Irradiance",
+           main = "Sensor 1 Plot",
            xlim = c(1, 1440), ylim = c(-10, max(550, max(sensorData + 10))))
       }
   })
   
+  output$dailySensorIrradiancePlot <- renderPlot({
+    data <- csv_data()
+    selected_date <- as.Date(input$Date)
+    start_date <- as.Date("2023-09-08")
+    difference <- as.integer(selected_date - start_date) + 1
+    
+    if (!is.null(clicked_marker())) {
+      marker_label <- clicked_marker()
+      column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
+      
+      if (column_name %in% colnames(data)) {
+        # Filter data for the selected DOY and sensor
+        filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
+        
+        # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
+        plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
+             xlab = "MINUTE",
+             ylab = paste(gsub("Marker ", "", marker_label), "Irradiance"),
+             main = paste(marker_label, "Irradiance for DOY ", difference),
+             xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
+      }
+    }
+  })
 }
 
 shinyApp(ui, server)
