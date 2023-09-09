@@ -12,16 +12,24 @@ library(leaflet)
 library(googledrive)
 
 ui <- fluidPage(
-  theme = bslib::bs_theme(bootswatch = "flatly"),
-  titlePanel(
-    h1("West Tennessee Solar Farm Dashboard", align = "center"),
-    windowTitle = "West Tennessee Solar Farm Dashboard"
+  #Changing Background Color
+  tags$style(
+    HTML("body {background-color: #e0f2e9;}")
   ),
+  #Adding Built-In Theme
+  theme = bslib::bs_theme(bootswatch = "yeti"),
+  #Header of Dashboard
+  titlePanel(
+       h1("West Tennessee Solar Farm Dashboard", align = "center", 
+          style = "background-color:#AEEEEE;"),
+       windowTitle = "West Tennessee Solar Farm Dashboard"
+  ),
+  #Splits Window Into Columns
     fluidRow(
       column(width = 5,  # Adjust the width as needed
              leafletOutput("map", width = "100%", height = "50vh")
              ),
-      column(width = 7, 
+      column(width = 7,
              navlistPanel(
                id = "Sensor Tabs",
                tabPanel("Live Data",
@@ -31,8 +39,8 @@ ui <- fluidPage(
                         dateInput("Date", "Start Date:", value = "2023-09-08", 
                                   min = "2023-09-08"),
                         plotOutput("dailySensorIrradiancePlot")
-                        )
-            ),
+                        ),
+               ),
       )
     )
 )
@@ -86,7 +94,7 @@ server <- function(input, output, session) {
     for (i in 1:10) {
       column_name <- paste0("Sensor.", i)
       if (column_name %in% colnames(data)) {
-        markers_data$irradiance[i] <- tail(data[data$DOY == 1, column_name], 1)
+        markers_data$irradiance[i] <- tail(data[, column_name], 1)
       }
     }
     leafletProxy("map") %>%
@@ -97,7 +105,7 @@ server <- function(input, output, session) {
         lng = ~lng,
         label = ~label,
         radius = 8,
-        popup = ~paste("Sensor: ", label, "<br>Current Irradiance: ", irradiance)
+        popup = ~paste(label, "<br>Current Irradiance: ", irradiance)
       )
   })
   
@@ -160,10 +168,21 @@ server <- function(input, output, session) {
              main = paste(marker_label, "Irradiance for DOY ", difference),
              xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
       }
+    } else {
+      marker_label <- "Sensor 1"
+      column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
+      
+      # Filter data for the selected DOY and sensor
+      filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
+      
+      # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
+      plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
+           xlab = "MINUTE",
+           ylab = paste(gsub("Marker ", "", marker_label), "Irradiance"),
+           main = paste(marker_label, "Irradiance for DOY ", difference),
+           xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
     }
   })
 }
 
 shinyApp(ui, server)
-
-
