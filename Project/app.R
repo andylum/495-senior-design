@@ -10,39 +10,51 @@
 library(shiny)
 library(leaflet)
 library(googledrive)
+#library(rsconnect)
+source("config.R")
+library(openmeteo)
 
+#https://seniordesign.shinyapps.io/shiny_dashboard/
 ui <- fluidPage(
   #Changing Background Color
   tags$style(
-    HTML("body {background-color: #e0f2e9;}")
+    HTML("body {background-color: #F5F7F8;}")
   ),
   #Adding Built-In Theme
   theme = bslib::bs_theme(bootswatch = "yeti"),
   #Header of Dashboard
   titlePanel(
        h1("West Tennessee Solar Farm Dashboard", align = "center", 
-          style = "background-color:#AEEEEE;"),
+          style = "background-color:#FF8200;"),
        windowTitle = "West Tennessee Solar Farm Dashboard"
   ),
   #Splits Window Into Columns
     fluidRow(
       column(width = 5,  # Adjust the width as needed
-             leafletOutput("map", width = "100%", height = "50vh")
+             leafletOutput("map", width = "100%", height = "50vh"),
              ),
       column(width = 7,
-             navlistPanel(
+             tabsetPanel(
                id = "Sensor Tabs",
+               #well = FALSE,
+               #widths = c(2, 12),
                tabPanel("Live Data",
                         plotOutput("clickedSensorPlot")
                         ),
                tabPanel("Daily Data",
                         dateInput("Date", "Start Date:", value = "2023-09-08", 
                                   min = "2023-09-08"),
-                        plotOutput("dailySensorIrradiancePlot")
-                        ),
+                        plotOutput("dailySensorIrradiancePlot"),
+                        div(
+                          downloadButton("downloadDailyData", "Download Daily Data", class = "btn-lg"),
+                        )
+                  ),
                ),
-      )
-    )
+             ),
+      tags$style(HTML("#weather_info table { margin-left: auto; margin-right: 0;
+                      width: 100% !important;}")),
+      tableOutput("weather_info")
+    ),
 )
 
 server <- function(input, output, session) {
@@ -68,10 +80,11 @@ server <- function(input, output, session) {
     }
   )
   
-  output$sensorTable <- renderTable({
-    csv_data()
-  })
-  
+  customColorPalette <- colorRampPalette(c("red", "yellow", "green"))(1000)
+  colorPalette <- colorNumeric(
+    palette = customColorPalette,
+    domain = markers_data$irradiance
+  )
   output$map <- renderLeaflet({
     leaflet(leafletOptions(maxZoom = 16, minZoom = 16)) %>%
       addTiles(options = tileOptions(minZoom = 16, maxZoom = 16)) %>%
@@ -85,7 +98,8 @@ server <- function(input, output, session) {
         lng = ~lng,
         label = ~label,
         radius = 8,
-        popup = ~paste("Sensor: ", label, "<br>Current Irradiance: ", irradiance)
+        popup = ~paste("Sensor: ", label, "<br>Current Irradiance: ", irradiance),
+        color = ~colorPalette(irradiance)
       )
   })
   
@@ -105,7 +119,8 @@ server <- function(input, output, session) {
         lng = ~lng,
         label = ~label,
         radius = 8,
-        popup = ~paste(label, "<br>Current Irradiance: ", irradiance)
+        popup = ~paste(label, "<br>Current Irradiance: ", irradiance),
+        color = ~colorPalette(irradiance)
       )
   })
   
@@ -138,7 +153,7 @@ server <- function(input, output, session) {
              xlim = c(1, 1440), ylim = c(-10, max(550, max(sensorData + 10))))
       }
     } else {
-      sensorData <- data[, "Sensor.1"]
+      sensorData <- data[data$DOY == recent_doy, "Sensor.1"]
       plot(sensorData, type = "l",
            xlab = "Time",
            ylab = "Sensor 1 Irradiance",
@@ -183,6 +198,92 @@ server <- function(input, output, session) {
            xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
     }
   })
-}
+  
+  output$downloadDailyData <- downloadHandler(
+    filename = function() {
+      selected_date <- as.Date(input$Date)
+      file_name <- paste("Daily_Data_", format(selected_date, "%Y-%m-%d"), ".csv", sep = "")
+      return(file_name)
+    },
+    content = function(file) {
+      selected_date <- as.Date(input$Date)
+      start_date <- as.Date("2023-09-08")
+      difference <- as.integer(selected_date - start_date) + 1
+      
+      data <- csv_data()
+      
+      # Filter data for the selected DOY
+      filtered_data <- data[data$DOY == difference, ]
+      
+      # Write the filtered data to the CSV file
+      write.csv(filtered_data, file, row.names = FALSE)
+    }
+  )
+  
+  updateWeatherData <- reactivePoll(
+    intervalMillis = 10000,
+    session = session,
+    checkFunc = function() {
+      Sys.time()
+    },
+    valueFunc = function() {
+      coords <- c(35.50,-89.40)
 
+      start_date <- format(input$Date, format = "%Y-%m-%d")
+      end_date <- format(input$Date, format = "%Y-%m-%d")
+
+      weather_data <- weather_forecast(
+        location = coords,
+        start = start_date,
+        end = end_date,
+        hourly = c("cloudcover", "temperature_2m"),
+        daily = c("weathercode", "shortwave_radiation_sum"),
+        response_units = list(temperature_unit = "fahrenheit")
+      )
+      average_cloud_cover <- round(mean(weather_data$hourly_cloudcover, na.rm = TRUE), 2)
+      average_temperature <- round(mean(weather_data$hourly_temperature_2m, na.rm = TRUE), 2)
+
+      sky_weather <- head(weather_data$daily_weathercode, 1)
+      uv_radiation <- head(weather_data$daily_shortwave_radiation_sum, 1)
+      return(list(cloud_cover = average_cloud_cover, temperature = average_temperature,
+                  code = sky_weather, uv = uv_radiation))
+    }
+  )
+
+  output$weather_info <- renderTable({
+    cloud_cover <- updateWeatherData()$cloud_cover
+    temperature <- updateWeatherData()$temperature
+    sky_weather <- updateWeatherData()$code
+    uv <- updateWeatherData()$uv
+    if(sky_weather == 0) {
+      sky_weather <- "Clear Sky"
+    } else if(sky_weather == 1 | sky_weather == 2) {
+      sky_weather <- "Partly Cloudy"
+    } else if(sky_weather == 3) {
+      sky_weather <- "Overcast"
+    } else if(sky_weather == 45 | sky_weather == 48) {
+      sky_weather <- "Foggy"
+    } else if((sky_weather >= 51 & sky_weather <= 57) ) {
+      sky_weather <- "Drizzle"
+    } else if(sky_weather == 61 | sky_weather == 80) {
+      sky_weather <- "Light Rain"
+    } else if(sky_weather == 63 | sky_weather == 65 | sky_weather == 81 | sky_weather == 82) {
+      sky_weather <- "Moderate/Heavy Rain"
+    } else if(sky_weather == 66 | sky_weather == 67) {
+      sky_weather <- "Freezing Rain"
+    } else if((sky_weather >= 71 & sky_weather <= 77) | sky_weather == 85 | sky_weather == 86) {
+      sky_weather <- "Snow"
+    } else {
+      sky_weather <- "Thunderstorm"
+    }
+    weather_info <- data.frame(
+        Date = format(input$Date, format = "%Y-%m-%d"),
+        Metric = c("Predicted Average Cloud Cover (%)", "Predicted Average Temperature °F", "Weather Outlook", "Predicted UV Radiation"),
+        Value = c(cloud_cover,temperature, sky_weather, uv)
+    )
+
+    return(weather_info)
+  })
+  session$onSessionEnded(stopApp)
+}
 shinyApp(ui, server)
