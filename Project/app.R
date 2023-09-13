@@ -13,6 +13,7 @@ library(googledrive)
 #library(rsconnect)
 #source("config.R")
 library(openmeteo)
+library(zoo)
 
 #https://seniordesign.shinyapps.io/shiny_dashboard/
 ui <- fluidPage(
@@ -51,7 +52,8 @@ ui <- fluidPage(
                                   min = "2023-09-08"),
                         plotOutput("dailySensorIrradiancePlot"),
                         div(
-                          downloadButton("downloadDailyData", "Download Daily Data", class = "btn-lg"),
+                          actionButton("toggleDetrendedButton", "Toggle Detrended Data", style = "float: left;", class = "btn-default"),
+                          downloadButton("downloadDailyData", "Download Daily Data", class = "btn-default", style = "float: right;"),
                         )
                   ),
                ),
@@ -194,6 +196,22 @@ server <- function(input, output, session) {
       }
   })
   
+  detrended <- reactiveVal(FALSE)
+  
+  observeEvent(input$toggleDetrendedButton, {
+    detrended(!detrended())
+  })
+  
+  detrended_data <- reactive({
+    data <- csv_data()
+    if (detrended()) {
+      data$DetrendedValue <- detrend(data$irradiance)  # Adjust the column name
+      return(data)
+    } else {
+      return(NULL)
+    }
+  })
+  
   output$dailySensorIrradiancePlot <- renderPlot({
     data <- csv_data()
     selected_date <- as.Date(input$Date)
@@ -208,28 +226,54 @@ server <- function(input, output, session) {
         # Filter data for the selected DOY and sensor
         filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
         
-        # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
-        plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
-             xlab = "Time (Minutes)",
-             ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (W/m²)"),
-             main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
-             xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
-        grid()
+        if(detrended()) {
+          sensor_time_series <- zoo(filtered_data[, column_name], order.by = filtered_data$MINUTE)
+          
+          detrended_sensor <- diff(sensor_time_series)
+          
+          # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
+          plot(detrended_sensor, type = "l",
+               xlab = "Time (Minutes)",
+               ylab = paste(gsub("Marker ", "", marker_label), "Detrended Irradiance (W/m²)"),
+               main = paste(marker_label, "Detrended Irradiance", format(input$Date, "%m-%d-%Y")),
+               xlim = c(1, 1440), ylim = c(min(detrended_sensor) - 2, max(detrended_sensor) + 2))
+          grid()
+        } else {
+          plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
+               xlab = "Time (Minutes)",
+               ylab = paste(marker_label, "Irradiance (W/m²)"),
+               main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
+               xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
+          grid()
+        }
       }
     } else {
       marker_label <- "Sensor 1"
       column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
       
-      # Filter data for the selected DOY and sensor
       filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
       
-      # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
-      plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
-           xlab = "Time (Minutes)",
-           ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (W/m²)"),
-           main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
-           xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
-      grid()
+      if (detrended()) {
+        # Detrend the data (example using differencing)
+        detrended_sensor <- diff(filtered_data[, column_name])
+        
+        # Create the plot with MINUTE on the X-axis and detrended sensor irradiance on the Y-axis
+        plot(detrended_sensor, type = "l",
+             xlab = "Time (Minutes)",
+             ylab = paste(marker_label, "Detrended Irradiance (W/m²)"),
+             main = paste(marker_label, "Detrended Irradiance", format(input$Date, "%m-%d-%Y")),
+             xlim = c(1, 1440), ylim = c(min(min(detrended_sensor) - 2, -10), max(max(detrended_sensor) + 2, 10)))
+        grid()
+      } else {
+        # Use trended data (no detrending)
+        # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
+        plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
+             xlab = "Time (Minutes)",
+             ylab = paste(marker_label, "Irradiance (W/m²)"),
+             main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
+             xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
+        grid()
+      }
     }
   })
   
