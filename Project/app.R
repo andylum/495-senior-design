@@ -11,21 +11,21 @@ library(shiny)
 library(leaflet)
 library(googledrive)
 #library(rsconnect)
-source("config.R")
+#source("config.R")
 library(openmeteo)
 
 #https://seniordesign.shinyapps.io/shiny_dashboard/
 ui <- fluidPage(
   #Changing Background Color
   tags$style(
-    HTML("body {background-color: #F5F7F8;}")
+    HTML("body {background-color: #F5F7FA;}")
   ),
   #Adding Built-In Theme
   theme = bslib::bs_theme(bootswatch = "yeti"),
   #Header of Dashboard
   titlePanel(
-       h1("West Tennessee Solar Farm Dashboard", align = "center", 
-          style = "background-color:#FF8200;"),
+       h1("West Tennessee Solar Farm", align = "center", 
+          style = "background-color: #0b2341; color: #FF8200;"),
        windowTitle = "West Tennessee Solar Farm Dashboard"
   ),
   #Splits Window Into Columns
@@ -53,7 +53,35 @@ ui <- fluidPage(
              ),
       tags$style(HTML("#weather_info table { margin-left: auto; margin-right: 0;
                       width: 100% !important;}")),
-      tableOutput("weather_info")
+      tableOutput("weather_info"),
+      div(
+        style = "position: relative; width: 100%;",
+        div(
+          style = "position: absolute; bottom: -65px; left: 0; width: 100%; background-color: #0b2341; text-align: center; padding: 10px;",
+          h5("This project is supported by the University of Tennessee Research Foundation, the Department of",
+             style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;"),
+          h5("Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.",
+             style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;")
+        ),
+        # UT SYSTEM LOGO
+        div(
+          style = "position: absolute; bottom: -66px; left: 30px;", # Set bottom to 0 to position at the very bottom of the dashboard
+          img(src = "/UT-System-Primary-Left-Align-RGB-Orange.png", 
+              height = "60px", width = "auto")
+        ),
+        # UT RESEARCH FOUNDATION LOGO
+        div(
+          style = "position: absolute; bottom: -61px; left: 225px;", # Adjust the left position as needed
+          img(src = "/cropped-UTRF-logo-w-dots.png", 
+              height = "40px", width = "auto")
+        ),
+        # UTM LOGO
+        div(
+          style = "position: absolute; bottom: -52px; left: 430px; align-items: center;", # Adjust the left position as needed
+          img(src = "/ut-martin-primary-align-left-151.png",
+              height = "30px", width = "auto")  # Adjust the width and height as needed
+        )
+      )
     ),
 )
 
