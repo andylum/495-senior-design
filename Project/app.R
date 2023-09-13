@@ -85,32 +85,32 @@ ui <- fluidPage(
         )
       )
     )
-)
+  )
 
-server <- function(input, output, session) {
-  read_csv_data <- function() {
-    csv_data <- read.csv("https://docs.google.com/spreadsheets/d/1wZxQe8Sj9FtN7munorspl45K-xAGlpwKOs3R7lvLqkg/gviz/tq?tqx=out:csv", header = T)
-    return(csv_data)
-  }
-  markers_data <- data.frame(
-    lat = c(35.407478, 35.408833, 35.409777, 35.410766, 35.409819, 35.411284, 35.409485, 35.408433, 35.410268, 35.410074),
-    lng = c(-89.390113, -89.391825, -89.391935, -89.391956, -89.392733, -89.389521, -89.386922, -89.388013, -89.386861, -89.385514),
-    label = c("Sensor 1", "Sensor 2", "Sensor 3", "Sensor 4", "Sensor 5", "Sensor 6", "Sensor 7", "Sensor 8", "Sensor 9", "Sensor 10"),
-    irradiance = rep(0, 10)
-  )
-  
-  csv_data <- reactivePoll(
-    intervalMillis = 10000,  # Update interval in milliseconds 
-    session = session,
-    checkFunc = function() {
-      Sys.time()  # Always return current time to trigger updates
-    },
-    valueFunc = function() {
-      read_csv_data()
+  server <- function(input, output, session) {
+    read_csv_data <- function() {
+      csv_data <- read.csv("https://docs.google.com/spreadsheets/d/1wZxQe8Sj9FtN7munorspl45K-xAGlpwKOs3R7lvLqkg/gviz/tq?tqx=out:csv", header = T)
+      return(csv_data)
     }
-  )
+    markers_data <- data.frame(
+      lat = c(35.407478, 35.408833, 35.409777, 35.410766, 35.409819, 35.411284, 35.409485, 35.408433, 35.410268, 35.410074),
+      lng = c(-89.390113, -89.391825, -89.391935, -89.391956, -89.392733, -89.389521, -89.386922, -89.388013, -89.386861, -89.385514),
+      label = c("Sensor 1", "Sensor 2", "Sensor 3", "Sensor 4", "Sensor 5", "Sensor 6", "Sensor 7", "Sensor 8", "Sensor 9", "Sensor 10"),
+      irradiance = rep(0, 10)
+    )
   
-  customColorPalette <- colorRampPalette(c("red", "yellow", "lightgreen"))(1000)
+    csv_data <- reactivePoll(
+      intervalMillis = 10000,  # Update interval in milliseconds 
+      session = session,
+      checkFunc = function() {
+        Sys.time()  # Always return current time to trigger updates
+      },
+      valueFunc = function() {
+        read_csv_data()
+      }
+    )
+  
+  customColorPalette <- colorRampPalette(c("red", "lightgreen", "green"))(1000)
   colorPalette <- colorNumeric(
     palette = customColorPalette,
     domain = markers_data$irradiance
@@ -210,7 +210,7 @@ server <- function(input, output, session) {
         plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
              xlab = "Time (Minutes)",
              ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (m/W²)"),
-             main = paste(marker_label, "Irradiance for DOY ", format(input$Date, "%m-%d-%Y")),
+             main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
              xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
       }
     } else {
@@ -224,7 +224,7 @@ server <- function(input, output, session) {
       plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
            xlab = "Time (Minutes)",
            ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (m/W²)"),
-           main = paste(marker_label, "Irradiance for DOY ", format(input$Date, "%m-%d-%Y")),
+           main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
            xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
     }
   })
