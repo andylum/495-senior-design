@@ -24,10 +24,10 @@ ui <- fluidPage(
   theme = bslib::bs_theme(bootswatch = "yeti"),
   #Header of Dashboard
   titlePanel(
-       h1("West Tennessee Solar Farm", align = "center", 
-          style = "background-color: #0b2341; color: #FF8200;
-          width: 100vw; margin: -20px 0 0; padding: 10px; margin-left: -15px; margin-bottom: 10px;"),
-       windowTitle = "West Tennessee Solar Farm Dashboard"
+    h1("West Tennessee Solar Farm", align = "center", 
+       style = "background-color: #0b2341; color: #FF8200; 
+       width: 100vw; margin: -20px 0 0; padding: 10px; margin-left: -15px; margin-bottom: 10px;"),
+    windowTitle = "West Tennessee Solar Farm Dashboard"
   ),
   #Splits Window Into Columns
     fluidRow(
@@ -36,8 +36,8 @@ ui <- fluidPage(
              tags$style(HTML("#weather_info table { margin-left: auto; margin-right: 0;
                       width: 100% !important;}")),
              div(
-               h4("Tomorrow's Forecast", style = "text-align: center; font-weight: bold;"),
-               tableOutput("weather_info")
+             h4("Tomorrow's Forecast", style = "text-align: center; font-weight: bold;"),
+             tableOutput("weather_info")
              )
              ),
       column(width = 7,
@@ -56,59 +56,59 @@ ui <- fluidPage(
                   ),
                ),
              ),
-      div(
-        style = "position: relative; width: 100vw; bottom: -50px; margin-left: -15px;",
-        div(
-          style = "position: absolute; bottom: -65px; left: 0; width: 100%; background-color: #0b2341; text-align: center; padding: 10px;",
-          h5("This project is supported by the University of Tennessee Research Foundation, the Department of",
-             style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;"),
-          h5("Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.",
-             style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;")
-        ),
-        # UT SYSTEM LOGO
-        div(
-          style = "position: absolute; bottom: -62px; left: 15px;", # Set bottom to 0 to position at the very bottom of the dashboard
-          img(src = "UT-System-Primary-Left-Align-RGB-Orange.png", 
-              height = "60px", width = "auto")
-        ),
-        # UT RESEARCH FOUNDATION LOGO
-        div(
-          style = "position: absolute; bottom: -55px; left: 210px;", # Adjust the left position as needed
-          img(src = "cropped-UTRF-logo-w-dots.png", 
-              height = "40px", width = "auto")
-        ),
-        # UTM LOGO
-        div(
-          style = "position: absolute; bottom: -47px; left: 415px; align-items: center;", # Adjust the left position as needed
-          img(src = "ut-martin-primary-align-left-151.png",
-              height = "30px", width = "auto")  # Adjust the width and height as needed
-        )
-      )
+    ),
+  div(
+    style = "position: relative; width: 100vw; bottom: -50px; margin-left: -15px;",
+    div(
+      style = "position: absolute; bottom: -65px; left: 0; width: 100%; background-color: #0b2341; text-align: center; padding: 10px;",
+      h5("This project is supported by the University of Tennessee Research Foundation, the Department of",
+         style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;"),
+      h5("Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.",
+         style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;")
+    ),
+    # UT SYSTEM LOGO
+    div(
+      style = "position: absolute; bottom: -52px; left: 15px;", # Set bottom to 0 to position at the very bottom of the dashboard
+      img(src = "UT-System-Primary-Left-Align-RGB-Orange.png", 
+          height = "60px", width = "auto")
+    ),
+    # UT RESEARCH FOUNDATION LOGO
+    div(
+      style = "position: absolute; bottom: -47px; left: 210px;", # Adjust the left position as needed
+      img(src = "cropped-UTRF-logo-w-dots.png", 
+          height = "40px", width = "auto")
+    ),
+    # UTM LOGO
+    div(
+      style = "position: absolute; bottom: -37px; left: 415px; align-items: center;", # Adjust the left position as needed
+      img(src = "ut-martin-primary-align-left-151.png",
+          height = "30px", width = "auto")  # Adjust the width and height as needed
     )
   )
+)
 
-  server <- function(input, output, session) {
-    read_csv_data <- function() {
-      csv_data <- read.csv("https://docs.google.com/spreadsheets/d/1wZxQe8Sj9FtN7munorspl45K-xAGlpwKOs3R7lvLqkg/gviz/tq?tqx=out:csv", header = T)
-      return(csv_data)
-    }
-    markers_data <- data.frame(
-      lat = c(35.407478, 35.408833, 35.409777, 35.410766, 35.409819, 35.411284, 35.409485, 35.408433, 35.410268, 35.410074),
-      lng = c(-89.390113, -89.391825, -89.391935, -89.391956, -89.392733, -89.389521, -89.386922, -89.388013, -89.386861, -89.385514),
-      label = c("Sensor 1", "Sensor 2", "Sensor 3", "Sensor 4", "Sensor 5", "Sensor 6", "Sensor 7", "Sensor 8", "Sensor 9", "Sensor 10"),
-      irradiance = rep(0, 10)
-    )
+server <- function(input, output, session) {
+  read_csv_data <- function() {
+    csv_data <- read.csv("https://docs.google.com/spreadsheets/d/1wZxQe8Sj9FtN7munorspl45K-xAGlpwKOs3R7lvLqkg/gviz/tq?tqx=out:csv", header = T)
+    return(csv_data)
+  }
+  markers_data <- data.frame(
+    lat = c(35.407478, 35.408833, 35.409777, 35.410766, 35.409819, 35.411284, 35.409485, 35.408433, 35.410268, 35.410074),
+    lng = c(-89.390113, -89.391825, -89.391935, -89.391956, -89.392733, -89.389521, -89.386922, -89.388013, -89.386861, -89.385514),
+    label = c("Sensor 1", "Sensor 2", "Sensor 3", "Sensor 4", "Sensor 5", "Sensor 6", "Sensor 7", "Sensor 8", "Sensor 9", "Sensor 10"),
+    irradiance = rep(0, 10)
+  )
   
-    csv_data <- reactivePoll(
-      intervalMillis = 10000,  # Update interval in milliseconds 
-      session = session,
-      checkFunc = function() {
-        Sys.time()  # Always return current time to trigger updates
-      },
-      valueFunc = function() {
-        read_csv_data()
-      }
-    )
+  csv_data <- reactivePoll(
+    intervalMillis = 10000,  # Update interval in milliseconds 
+    session = session,
+    checkFunc = function() {
+      Sys.time()  # Always return current time to trigger updates
+    },
+    valueFunc = function() {
+      read_csv_data()
+    }
+  )
   
   customColorPalette <- colorRampPalette(c("red", "lightgreen", "green"))(1000)
   colorPalette <- colorNumeric(
@@ -178,17 +178,19 @@ ui <- fluidPage(
         sensorData <- data[data$DOY == recent_doy, column_name]
         plot(sensorData, type = "l",
              xlab = "Time (Minutes)",
-             ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (m/W²)"),
+             ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (W/m²)"),
              main = paste(marker_label, "Plot"),
              xlim = c(1, 1440), ylim = c(-10, max(550, max(sensorData + 10))))
+        grid()
       }
     } else {
       sensorData <- data[data$DOY == recent_doy, "Sensor.1"]
       plot(sensorData, type = "l",
            xlab = "Time (Minutes)",
-           ylab = "Sensor 1 Irradiance (m/W²)",
+           ylab = "Sensor 1 Irradiance (W/m²)",
            main = "Sensor 1 Plot",
            xlim = c(1, 1440), ylim = c(-10, max(550, max(sensorData + 10))))
+      grid()
       }
   })
   
@@ -209,9 +211,10 @@ ui <- fluidPage(
         # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
         plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
              xlab = "Time (Minutes)",
-             ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (m/W²)"),
+             ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (W/m²)"),
              main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
              xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
+        grid()
       }
     } else {
       marker_label <- "Sensor 1"
@@ -223,9 +226,10 @@ ui <- fluidPage(
       # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
       plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
            xlab = "Time (Minutes)",
-           ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (m/W²)"),
+           ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (W/m²)"),
            main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
            xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
+      grid()
     }
   })
   
