@@ -1,14 +1,15 @@
 # Revitalizing Solar Insights: A Dashboard for West Tennessee Solar Farm
 Joshua Chamberlain and Andy Lum
 
-## Description
-Welcome to the GitHub repository for our senior design class project! Our project aims to construct an interactive dashboard to visualize and retrieve solar irradiance data collected at the West Tennessee Solar Farm in Stanton, Tennessee.
-The University of Tennessee Research Foundation is interested in revitalizing this site due to its proximity to the new Ford plant. Currently, the interactive dashboard located on the Farm’s website does not work. We plan to make use of
-R, Shiny, Python, and SQL. The plan is to use simulated solar irradiance data and a hypothetical layout of sensors at the plant. Overall, we will make use of Python to simulate real-time data collection and use R and Shiny to create the dashboard. This dashboard will then be incorporated into a dedicated website, ensuring its widespread availability to the general public.
+## Abstract
+This project will focus on creating an interactive dashboard for displaying solar irradiance data collected at a photovoltaic power station. Given a recent push by the University of Tennessee Research Foundation toward revitalizing its use, the West Tennessee Solar Farm will serve as a template. This location is of particular interest due to its proximity to Blue Oval City (the site of the new Ford manufacturing plant, near Stanton, TN). With the farm’s existing dashboard being non-functional, there is a demand for a solution, which we will achieve through MySQL, Python, Google Drive API, R-Shiny, Shinyapps.io, and Google Cloud Console.
+MySQL serves as our data hub, efficiently organizing solar energy data by sensor location. Python, coupled with the Google Drive API, simulates real-time data collection. The core of the project is an R-Shiny dashboard offering real-time data visualization, interactive maps, detailed sensor information, and access to historical data and analysis. Users can select their desired time frames, making it user-friendly. Shinyapps.io hosts the dashboard, ensuring broad accessibility. To further fortify data security and enhance user convenience, Google Cloud Console safeguards our API information. 
+Our dashboard incorporates an export function, enabling users to extract data. We aspire to craft an easy-to-use webpage that is accessible across various major operating systems. This approach ensures that our project is widely available and caters to a diverse audience; thus, making valuable solar irradiance data easily accessible to all. This project aims to provide researchers, policymakers, and the public with real-time insights into solar irradiance data at the West Tennessee Solar Farm, supporting sustainable energy solutions. We are committed to innovation, data accessibility, and practical technology application to address real-world challenges. 
+
 
 ## Technologies
 * __MySQL__
-  - Stores and manages sensor data in a table containing 4 columns: `Sensor_id`, `timestamp`, `date`, and `irradiance`.
+  - Stores and manages sensor data in a table containing columns: `DOY (Day of Year)`, `MINUTE`, `Sensor1`, `Sensor2`, `Sensor3`, `Sensor4`, `Sensor5`, `Sensor6`, `Sensor7`, `Sensor8`, `Sensor9`,and `Sensor10`.
   - Connects to Python program.
 * __Python__
   - Retrieves data from the MySQL database and updates a Google Drive CSV for data simulation.

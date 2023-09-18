@@ -13,76 +13,80 @@ library(googledrive)
 #library(rsconnect)
 #source("config.R")
 library(openmeteo)
+library(zoo)
 
 #https://seniordesign.shinyapps.io/shiny_dashboard/
 ui <- fluidPage(
   #Changing Background Color
   tags$style(
-    HTML("body {background-color: #F5F7FA;}")
+    HTML("body {background-color: #F5F7F8;}")
   ),
   #Adding Built-In Theme
   theme = bslib::bs_theme(bootswatch = "yeti"),
   #Header of Dashboard
   titlePanel(
-       h1("West Tennessee Solar Farm", align = "center", 
-          style = "background-color: #0b2341; color: #FF8200;"),
-       windowTitle = "West Tennessee Solar Farm Dashboard"
+    h1("West Tennessee Solar Farm", align = "center", 
+       style = "background-color: #0b2341; color: #FF8200; 
+       width: 100vw; margin: -20px 0 0; padding: 10px; margin-left: -15px; margin-bottom: 10px;"),
+    windowTitle = "West Tennessee Solar Farm Dashboard"
   ),
   #Splits Window Into Columns
     fluidRow(
       column(width = 5,  # Adjust the width as needed
              leafletOutput("map", width = "100%", height = "50vh"),
+             tags$style(HTML("#weather_info table { margin-left: auto; margin-right: 0;
+                      width: 100% !important;}")),
+             div(
+             h4("Tomorrow's Forecast", style = "text-align: center; font-weight: bold;"),
+             tableOutput("weather_info")
+             )
              ),
       column(width = 7,
              tabsetPanel(
                id = "Sensor Tabs",
-               #well = FALSE,
-               #widths = c(2, 12),
                tabPanel("Live Data",
-                        plotOutput("clickedSensorPlot")
+                        plotOutput("clickedSensorPlot"),
                         ),
                tabPanel("Daily Data",
                         dateInput("Date", "Start Date:", value = "2023-09-08", 
                                   min = "2023-09-08"),
                         plotOutput("dailySensorIrradiancePlot"),
                         div(
-                          downloadButton("downloadDailyData", "Download Daily Data", class = "btn-lg"),
+                          actionButton("toggleDetrendedButton", "Toggle Detrended Data", style = "float: left;", class = "btn-default"),
+                          downloadButton("downloadDailyData", "Download Daily Data", class = "btn-default", style = "float: right;"),
                         )
                   ),
                ),
              ),
-      tags$style(HTML("#weather_info table { margin-left: auto; margin-right: 0;
-                      width: 100% !important;}")),
-      tableOutput("weather_info"),
-      div(
-        style = "position: relative; width: 100%;",
-        div(
-          style = "position: absolute; bottom: -65px; left: 0; width: 100%; background-color: #0b2341; text-align: center; padding: 10px;",
-          h5("This project is supported by the University of Tennessee Research Foundation, the Department of",
-             style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;"),
-          h5("Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.",
-             style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;")
-        ),
-        # UT SYSTEM LOGO
-        div(
-          style = "position: absolute; bottom: -66px; left: 30px;", # Set bottom to 0 to position at the very bottom of the dashboard
-          img(src = "/UT-System-Primary-Left-Align-RGB-Orange.png", 
-              height = "60px", width = "auto")
-        ),
-        # UT RESEARCH FOUNDATION LOGO
-        div(
-          style = "position: absolute; bottom: -61px; left: 225px;", # Adjust the left position as needed
-          img(src = "/cropped-UTRF-logo-w-dots.png", 
-              height = "40px", width = "auto")
-        ),
-        # UTM LOGO
-        div(
-          style = "position: absolute; bottom: -52px; left: 430px; align-items: center;", # Adjust the left position as needed
-          img(src = "/ut-martin-primary-align-left-151.png",
-              height = "30px", width = "auto")  # Adjust the width and height as needed
-        )
-      )
     ),
+  div(
+    style = "position: relative; width: 100vw; bottom: -50px; margin-left: -15px;",
+    div(
+      style = "position: absolute; bottom: -65px; left: 0; width: 100%; background-color: #0b2341; text-align: center; padding: 10px;",
+      h5("This project is supported by the University of Tennessee Research Foundation, the Department of",
+         style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;"),
+      h5("Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.",
+         style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;")
+    ),
+    # UT SYSTEM LOGO
+    div(
+      style = "position: absolute; bottom: -52px; left: 15px;", # Set bottom to 0 to position at the very bottom of the dashboard
+      img(src = "UT-System-Primary-Left-Align-RGB-Orange.png", 
+          height = "60px", width = "auto")
+    ),
+    # UT RESEARCH FOUNDATION LOGO
+    div(
+      style = "position: absolute; bottom: -47px; left: 210px;", # Adjust the left position as needed
+      img(src = "cropped-UTRF-logo-w-dots.png", 
+          height = "40px", width = "auto")
+    ),
+    # UTM LOGO
+    div(
+      style = "position: absolute; bottom: -37px; left: 415px; align-items: center;", # Adjust the left position as needed
+      img(src = "ut-martin-primary-align-left-151.png",
+          height = "30px", width = "auto")  # Adjust the width and height as needed
+    )
+  )
 )
 
 server <- function(input, output, session) {
@@ -108,7 +112,7 @@ server <- function(input, output, session) {
     }
   )
   
-  customColorPalette <- colorRampPalette(c("red", "yellow", "green"))(1000)
+  customColorPalette <- colorRampPalette(c("red", "lightgreen", "green"))(1000)
   colorPalette <- colorNumeric(
     palette = customColorPalette,
     domain = markers_data$irradiance
@@ -127,7 +131,7 @@ server <- function(input, output, session) {
         label = ~label,
         radius = 8,
         popup = ~paste("Sensor: ", label, "<br>Current Irradiance: ", irradiance),
-        color = ~colorPalette(irradiance)
+        color = ~colorPalette(markers_data$irradiance)
       )
   })
   
@@ -148,7 +152,7 @@ server <- function(input, output, session) {
         label = ~label,
         radius = 8,
         popup = ~paste(label, "<br>Current Irradiance: ", irradiance),
-        color = ~colorPalette(irradiance)
+        color = ~colorPalette(markers_data$irradiance)
       )
   })
   
@@ -175,19 +179,37 @@ server <- function(input, output, session) {
       if (column_name %in% colnames(data)) {
         sensorData <- data[data$DOY == recent_doy, column_name]
         plot(sensorData, type = "l",
-             xlab = "Time",
-             ylab = paste(gsub("Marker ", "", marker_label), "Irradiance"),
+             xlab = "Time (Minutes)",
+             ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (W/m²)"),
              main = paste(marker_label, "Plot"),
              xlim = c(1, 1440), ylim = c(-10, max(550, max(sensorData + 10))))
+        grid()
       }
     } else {
       sensorData <- data[data$DOY == recent_doy, "Sensor.1"]
       plot(sensorData, type = "l",
-           xlab = "Time",
-           ylab = "Sensor 1 Irradiance",
+           xlab = "Time (Minutes)",
+           ylab = "Sensor 1 Irradiance (W/m²)",
            main = "Sensor 1 Plot",
            xlim = c(1, 1440), ylim = c(-10, max(550, max(sensorData + 10))))
+      grid()
       }
+  })
+  
+  detrended <- reactiveVal(FALSE)
+  
+  observeEvent(input$toggleDetrendedButton, {
+    detrended(!detrended())
+  })
+  
+  detrended_data <- reactive({
+    data <- csv_data()
+    if (detrended()) {
+      data$DetrendedValue <- detrend(data$irradiance)  # Adjust the column name
+      return(data)
+    } else {
+      return(NULL)
+    }
   })
   
   output$dailySensorIrradiancePlot <- renderPlot({
@@ -204,26 +226,54 @@ server <- function(input, output, session) {
         # Filter data for the selected DOY and sensor
         filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
         
-        # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
-        plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
-             xlab = "MINUTE",
-             ylab = paste(gsub("Marker ", "", marker_label), "Irradiance"),
-             main = paste(marker_label, "Irradiance for DOY ", difference),
-             xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
+        if(detrended()) {
+          sensor_time_series <- zoo(filtered_data[, column_name], order.by = filtered_data$MINUTE)
+          
+          detrended_sensor <- diff(sensor_time_series)
+          
+          # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
+          plot(detrended_sensor, type = "l",
+               xlab = "Time (Minutes)",
+               ylab = paste(gsub("Marker ", "", marker_label), "Detrended Irradiance (W/m²)"),
+               main = paste(marker_label, "Detrended Irradiance", format(input$Date, "%m-%d-%Y")),
+               xlim = c(1, 1440), ylim = c(min(detrended_sensor) - 2, max(detrended_sensor) + 2))
+          grid()
+        } else {
+          plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
+               xlab = "Time (Minutes)",
+               ylab = paste(marker_label, "Irradiance (W/m²)"),
+               main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
+               xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
+          grid()
+        }
       }
     } else {
       marker_label <- "Sensor 1"
       column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
       
-      # Filter data for the selected DOY and sensor
       filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
       
-      # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
-      plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
-           xlab = "MINUTE",
-           ylab = paste(gsub("Marker ", "", marker_label), "Irradiance"),
-           main = paste(marker_label, "Irradiance for DOY ", difference),
-           xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
+      if (detrended()) {
+        # Detrend the data (example using differencing)
+        detrended_sensor <- diff(filtered_data[, column_name])
+        
+        # Create the plot with MINUTE on the X-axis and detrended sensor irradiance on the Y-axis
+        plot(detrended_sensor, type = "l",
+             xlab = "Time (Minutes)",
+             ylab = paste(marker_label, "Detrended Irradiance (W/m²)"),
+             main = paste(marker_label, "Detrended Irradiance", format(input$Date, "%m-%d-%Y")),
+             xlim = c(1, 1440), ylim = c(min(min(detrended_sensor) - 2, -10), max(max(detrended_sensor) + 2, 10)))
+        grid()
+      } else {
+        # Use trended data (no detrending)
+        # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
+        plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
+             xlab = "Time (Minutes)",
+             ylab = paste(marker_label, "Irradiance (W/m²)"),
+             main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
+             xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
+        grid()
+      }
     }
   })
   
@@ -257,8 +307,8 @@ server <- function(input, output, session) {
     valueFunc = function() {
       coords <- c(35.50,-89.40)
 
-      start_date <- format(input$Date, format = "%Y-%m-%d")
-      end_date <- format(input$Date, format = "%Y-%m-%d")
+      start_date <- format(Sys.Date() + 1, format = "%Y-%m-%d")
+      end_date <- format(Sys.Date() + 1, format = "%Y-%m-%d")
 
       weather_data <- weather_forecast(
         location = coords,
@@ -305,7 +355,7 @@ server <- function(input, output, session) {
       sky_weather <- "Thunderstorm"
     }
     weather_info <- data.frame(
-        Date = format(input$Date, format = "%Y-%m-%d"),
+        Date = format(Sys.Date() + 1, format = "%Y-%m-%d"),
         Metric = c("Predicted Average Cloud Cover (%)", "Predicted Average Temperature °F", "Weather Outlook", "Predicted UV Radiation"),
         Value = c(cloud_cover,temperature, sky_weather, uv)
     )
