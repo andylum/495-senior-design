@@ -11,84 +11,109 @@ library(shiny)
 library(leaflet)
 library(googledrive)
 library(rsconnect)
-source("config.R")
 library(openmeteo)
 library(ggplot2)
 library(plotly)
 
 #https://seniordesign.shinyapps.io/shiny_dashboard/
 ui <- fluidPage(
-  #Changing Background Color
+  # Changing Background Color
   tags$style(
-    HTML("body {background-color: #F5F7F8;}")
+    HTML("body {background-color: #F5F7F8; margin: 0;}"),  # Extend background to the edges
+    HTML(".container-fluid {padding-left: 0; padding-right: 0;}")  # Remove padding for the container
   ),
-  #Adding Built-In Theme
+  # Adding Built-In Theme
   theme = bslib::bs_theme(bootswatch = "yeti"),
-  #Header of Dashboard
-  titlePanel(
-    h1("West Tennessee Solar Farm", align = "center", 
-       style = "background-color: #0b2341; color: #FF8200; 
-       width: 100vw; margin: -20px 0 0; padding: 10px; margin-left: -15px; margin-bottom: 10px;"),
-    windowTitle = "West Tennessee Solar Farm Dashboard"
-  ),
-  #Splits Window Into Columns
-    fluidRow(
-      column(width = 5,  # Adjust the width as needed
-             leafletOutput("map", width = "100%", height = "50vh"),
-             tags$style(HTML("#weather_info table { margin-left: auto; margin-right: 0;
-                      width: 100% !important;}")),
-             div(
-             h4("Tomorrow's Forecast", style = "text-align: center; font-weight: bold;"),
-             tableOutput("weather_info")
-             )
-             ),
-      column(width = 7,
-             tabsetPanel(
-               id = "Sensor Tabs",
-               tabPanel("Live Data",
-                        plotlyOutput("clickedSensorPlot"),
-                        ),
-               tabPanel("Daily Data",
-                        dateInput("Date", "Start Date:", value = "2023-09-08", 
-                                  min = "2023-09-08"),
-                        plotlyOutput("dailySensorIrradiancePlot"),
-                        div(
-                          actionButton("toggleDetrendedButton", "Toggle Detrended Data", style = "float: left;", class = "btn-default"),
-                          downloadButton("downloadDailyData", "Download Daily Data", class = "btn-default", style = "float: right;"),
-                        )
-                  ),
-               ),
-             ),
-    ),
+  # Header of Dashboard
+  tags$style(HTML("
+    .custom-title-panel {
+      height: 80px;
+      background-color: #0b2341;
+      color: #FF8200;
+      margin: 10;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  ")),
   div(
-    style = "position: relative; width: 100vw; bottom: -50px; margin-left: -15px;",
-    div(
-      style = "position: absolute; bottom: -65px; left: 0; width: 100%; background-color: #0b2341; text-align: center; padding: 10px;",
-      h5("This project is supported by the University of Tennessee Research Foundation, the Department of",
-         style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;"),
-      h5("Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.",
-         style = "color: #F5F7FA; font-weight: bold; text-align: right; font-size: 11px;")
+    class = "custom-title-panel",
+    titlePanel(
+      h1("West Tennessee Solar Farm", align = "center"),
+      windowTitle = "West Tennessee Solar Farm Dashboard"
     ),
-    # UT SYSTEM LOGO
+  ),
+  # Main Content
+  div(
+    style = "display: flex; flex-direction: column; min-height: 100vh;",
     div(
-      style = "position: absolute; bottom: -52px; left: 15px;", # Set bottom to 0 to position at the very bottom of the dashboard
-      img(src = "UT-System-Primary-Left-Align-RGB-Orange.png", 
-          height = "60px", width = "auto")
+      style = "flex-grow: 1;",
+      fluidRow(
+        column(
+          width = 5,
+          leafletOutput("map", width = "100%", height = "50vh"),
+          tags$style(HTML("#weather_info table { margin-left: auto; margin-right: 0;
+                          width: 100% !important;}")),
+          div(
+            h4("Tomorrow's Forecast", style = "text-align: center; font-weight: bold;"),
+            tableOutput("weather_info")
+          )
+        ),
+        column(
+          width = 7,
+          tabsetPanel(
+            id = "Sensor Tabs",
+            tabPanel("Live Data",
+                     plotlyOutput("clickedSensorPlot"),
+            ),
+            tabPanel("Daily Data",
+                     dateInput("Date", "Start Date:", value = "2023-09-08",
+                               min = "2023-09-08"),
+                     plotlyOutput("dailySensorIrradiancePlot"),
+                     div(
+                       actionButton("toggleDetrendedButton", "Toggle Detrended Data", style = "float: left;", class = "btn-default"),
+                       downloadButton("downloadDailyData", "Download Daily Data", class = "btn-default", style = "float: right;"),
+                     )
+            ),
+          ),
+        ),
+      )
     ),
-    # UT RESEARCH FOUNDATION LOGO
     div(
-      style = "position: absolute; bottom: -47px; left: 210px;", # Adjust the left position as needed
-      img(src = "cropped-UTRF-logo-w-dots.png", 
-          height = "40px", width = "auto")
-    ),
-    # UTM LOGO
-    div(
-      style = "position: absolute; bottom: -37px; left: 415px; align-items: center;", # Adjust the left position as needed
-      img(src = "ut-martin-primary-align-left-151.png",
-          height = "30px", width = "auto")  # Adjust the width and height as needed
+      style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 10px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
+      # Left side with images
+      div(
+        img(
+          src = "UT-System-Primary-Left-Align-RGB-Orange.png",
+          height = "66px",
+          width = "auto",
+          style = "margin-right: 10px;"
+        ),
+        img(
+          src = "cropped-UTRF-logo-w-dots.png",
+          height = "40px",
+          width = "auto",
+          style = "margin-right: 10px;"
+        ),
+        img(
+          src = "ut-martin-primary-align-left-151.png",
+          height = "32px",
+          width = "auto",
+          style = "margin-right: 20px;"
+        )
+      ),
+      # Right side with text
+      div(
+        h5("This project is supported by the University of Tennessee Research Foundation, the Department of Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.", style = "font-weight: bold; font-size: 12px;")
+      )
     )
   )
 )
+
+
+
 
 server <- function(input, output, session) {
   read_csv_data <- function() {
