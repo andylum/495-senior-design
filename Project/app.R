@@ -10,10 +10,11 @@
 library(shiny)
 library(leaflet)
 library(googledrive)
-#library(rsconnect)
-#source("config.R")
+library(rsconnect)
+source("config.R")
 library(openmeteo)
-library(zoo)
+library(ggplot2)
+library(plotly)
 
 #https://seniordesign.shinyapps.io/shiny_dashboard/
 ui <- fluidPage(
@@ -45,12 +46,12 @@ ui <- fluidPage(
              tabsetPanel(
                id = "Sensor Tabs",
                tabPanel("Live Data",
-                        plotOutput("clickedSensorPlot"),
+                        plotlyOutput("clickedSensorPlot"),
                         ),
                tabPanel("Daily Data",
                         dateInput("Date", "Start Date:", value = "2023-09-08", 
                                   min = "2023-09-08"),
-                        plotOutput("dailySensorIrradiancePlot"),
+                        plotlyOutput("dailySensorIrradiancePlot"),
                         div(
                           actionButton("toggleDetrendedButton", "Toggle Detrended Data", style = "float: left;", class = "btn-default"),
                           downloadButton("downloadDailyData", "Download Daily Data", class = "btn-default", style = "float: right;"),
@@ -143,6 +144,7 @@ server <- function(input, output, session) {
         markers_data$irradiance[i] <- tail(data[, column_name], 1)
       }
     }
+    
     leafletProxy("map") %>%
       clearPopups() %>%
       addCircleMarkers(
@@ -170,7 +172,7 @@ server <- function(input, output, session) {
     }
   }, ignoreInit = TRUE)
   
-  output$clickedSensorPlot <- renderPlot({
+  output$clickedSensorPlot <- renderPlotly({
     data <- csv_data()
     recent_doy <- max(data$DOY)
     if(!is.null(clicked_marker())) {
@@ -178,22 +180,40 @@ server <- function(input, output, session) {
       column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
       if (column_name %in% colnames(data)) {
         sensorData <- data[data$DOY == recent_doy, column_name]
-        plot(sensorData, type = "l",
-             xlab = "Time (Minutes)",
-             ylab = paste(gsub("Marker ", "", marker_label), "Irradiance (W/m²)"),
-             main = paste(marker_label, "Plot"),
-             xlim = c(1, 1440), ylim = c(-10, max(550, max(sensorData + 10))))
-        grid()
+        
+        p <- ggplot(data = data[data$DOY == recent_doy, ],
+                    aes(x = MINUTE, y = .data[[column_name]])) +
+          geom_line() +
+          labs(x = "Time (Hours)",
+               y = paste(gsub("Marker ", "", marker_label), "Irradiance (W/m²)"),
+               title = paste(marker_label, "Plot"))
+        p <- p + scale_x_continuous(
+          breaks = seq(0, 1440, by = 60),
+          labels = seq(0, 24, by = 1),
+          limits = c(0, 1440)
+        )
+        p <- ggplotly(p)
+        p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
       }
+      return(p)
     } else {
       sensorData <- data[data$DOY == recent_doy, "Sensor.1"]
-      plot(sensorData, type = "l",
-           xlab = "Time (Minutes)",
-           ylab = "Sensor 1 Irradiance (W/m²)",
-           main = "Sensor 1 Plot",
-           xlim = c(1, 1440), ylim = c(-10, max(550, max(sensorData + 10))))
-      grid()
-      }
+      
+      p <- ggplot(data = data[data$DOY == recent_doy, ], 
+                  aes(x = MINUTE, y = Sensor.1)) +
+        geom_line() + 
+        labs(x = "Time (Hours)",
+             y = "Sensor 1 Irradiance (W/m²)",
+             title = "Sensor 1 Plot")
+      p <- p + scale_x_continuous(
+        breaks = seq(0, 1440, by = 60),
+        labels = seq(0, 24, by = 1),
+        limits = c(0, 1440)
+      )
+      p <- ggplotly(p)
+      p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
+      return(p)
+    }
   })
   
   detrended <- reactiveVal(FALSE)
@@ -212,7 +232,7 @@ server <- function(input, output, session) {
     }
   })
   
-  output$dailySensorIrradiancePlot <- renderPlot({
+  output$dailySensorIrradiancePlot <- renderPlotly({
     data <- csv_data()
     selected_date <- as.Date(input$Date)
     start_date <- as.Date("2023-09-08")
@@ -227,24 +247,43 @@ server <- function(input, output, session) {
         filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
         
         if(detrended()) {
-          sensor_time_series <- zoo(filtered_data[, column_name], order.by = filtered_data$MINUTE)
+          # Detrend the data
+          detrended_sensor <- diff(filtered_data[, column_name])
           
-          detrended_sensor <- diff(sensor_time_series)
+          p_data <- data.frame(MINUTE = filtered_data$MINUTE[-nrow(filtered_data)], DetrendedValue = detrended_sensor)
           
-          # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
-          plot(detrended_sensor, type = "l",
-               xlab = "Time (Minutes)",
-               ylab = paste(gsub("Marker ", "", marker_label), "Detrended Irradiance (W/m²)"),
-               main = paste(marker_label, "Detrended Irradiance", format(input$Date, "%m-%d-%Y")),
-               xlim = c(1, 1440), ylim = c(min(detrended_sensor) - 2, max(detrended_sensor) + 2))
-          grid()
+          # Create the plot with MINUTE on the X-axis and detrended sensor irradiance on the Y-axis
+          p <- ggplot(data = p_data, aes(x = MINUTE, y = DetrendedValue)) +
+            geom_line() +
+            labs(
+              title = paste(marker_label, "Detrended Irradiance", format(input$Date, "%m-%d-%Y")),
+              x = "Time (Minutes)",
+              y = paste(marker_label, "Detrended Irradiance (W/m²)")
+            )
+          p <- p + scale_x_continuous(
+            breaks = seq(0, 1440, by = 60),
+            labels = seq(0, 24, by = 1),
+            limits = c(0, 1440)
+          )
+          p <- ggplotly(p)
+          p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
+          return(p)
         } else {
-          plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
-               xlab = "Time (Minutes)",
-               ylab = paste(marker_label, "Irradiance (W/m²)"),
-               main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
-               xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
-          grid()
+          p <- ggplot(data = filtered_data, aes(x = MINUTE, y = .data[[column_name]])) +
+            geom_line() +
+            labs(
+              title = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
+              x = "Time (Hours)",
+              y = paste(marker_label, "Irradiance (W/m²)")
+            )
+          p <- p + scale_x_continuous(
+            breaks = seq(0, 1440, by = 60),
+            labels = seq(0, 24, by = 1),
+            limits = c(0, 1440)
+          )
+          p <- ggplotly(p)
+          p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
+          return(p)
         }
       }
     } else {
@@ -254,28 +293,51 @@ server <- function(input, output, session) {
       filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
       
       if (detrended()) {
-        # Detrend the data (example using differencing)
-        detrended_sensor <- diff(filtered_data[, column_name])
-        
-        # Create the plot with MINUTE on the X-axis and detrended sensor irradiance on the Y-axis
-        plot(detrended_sensor, type = "l",
-             xlab = "Time (Minutes)",
-             ylab = paste(marker_label, "Detrended Irradiance (W/m²)"),
-             main = paste(marker_label, "Detrended Irradiance", format(input$Date, "%m-%d-%Y")),
-             xlim = c(1, 1440), ylim = c(min(min(detrended_sensor) - 2, -10), max(max(detrended_sensor) + 2, 10)))
-        grid()
+        if (detrended()) {
+          # Detrend the data
+          detrended_sensor <- diff(filtered_data[, column_name])
+          
+          p_data <- data.frame(MINUTE = filtered_data$MINUTE[-nrow(filtered_data)], DetrendedValue = detrended_sensor)
+          
+          # Create the plot with MINUTE on the X-axis and detrended sensor irradiance on the Y-axis
+          p <- ggplot(data = p_data, aes(x = MINUTE, y = DetrendedValue)) +
+            geom_line() +
+            labs(
+              title = paste(marker_label, "Detrended Irradiance", format(input$Date, "%m-%d-%Y")),
+              x = "Time (Minutes)",
+              y = paste(marker_label, "Detrended Irradiance (W/m²)")
+            )
+          p <- p + scale_x_continuous(
+            breaks = seq(0, 1440, by = 60),
+            labels = seq(0, 24, by = 1),
+            limits = c(0, 1440)
+          )
+          p <- ggplotly(p)
+          p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
+          return(p)
+        }
       } else {
         # Use trended data (no detrending)
         # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
-        plot(filtered_data$MINUTE, filtered_data[, column_name], type = "l",
-             xlab = "Time (Minutes)",
-             ylab = paste(marker_label, "Irradiance (W/m²)"),
-             main = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
-             xlim = c(1, 1440), ylim = c(-10, max(550, max(filtered_data[, column_name] + 10))))
-        grid()
+        p <- ggplot(data = filtered_data, aes(x = MINUTE, y = .data[[column_name]])) +
+          geom_line() +
+          labs(
+            title = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
+            x = "Time (Hours)",
+            y = paste(marker_label, "Irradiance (W/m²)")
+          )
+        p <- p + scale_x_continuous(
+          breaks = seq(0, 1440, by = 60),
+          labels = seq(0, 24, by = 1),
+          limits = c(0, 1440)
+        )
+        p <- ggplotly(p)
+        p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
+        return(p)
       }
     }
   })
+  
   
   output$downloadDailyData <- downloadHandler(
     filename = function() {
