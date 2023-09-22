@@ -47,7 +47,7 @@ ui <- fluidPage(
   ),
   # Main Content
   div(
-    style = "display: flex; flex-direction: column; min-height: 100vh;",
+    style = "display: flex; flex-direction: column; min-height: 89vh;",
     div(
       style = "flex-grow: 1;",
       fluidRow(
@@ -82,9 +82,10 @@ ui <- fluidPage(
       )
     ),
     div(
-      style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 10px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
+      style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
       # Left side with images
       div(
+        style = "display: flex; align-items: center;",
         img(
           src = "UT-System-Primary-Left-Align-RGB-Orange.png",
           height = "66px",
@@ -205,7 +206,6 @@ server <- function(input, output, session) {
       column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
       if (column_name %in% colnames(data)) {
         sensorData <- data[data$DOY == recent_doy, column_name]
-        
         p <- ggplot(data = data[data$DOY == recent_doy, ],
                     aes(x = MINUTE, y = .data[[column_name]])) +
           geom_line() +
@@ -216,6 +216,10 @@ server <- function(input, output, session) {
           breaks = seq(0, 1440, by = 60),
           labels = seq(0, 24, by = 1),
           limits = c(0, 1440)
+        )
+        p <- p + scale_y_continuous(
+          limits = c(-10, max(sensorData, 550)),
+          breaks = seq(0, max(sensorData, 550), by = 100)
         )
         p <- ggplotly(p)
         p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
@@ -234,6 +238,10 @@ server <- function(input, output, session) {
         breaks = seq(0, 1440, by = 60),
         labels = seq(0, 24, by = 1),
         limits = c(0, 1440)
+      )
+      p <- p + scale_y_continuous(
+        limits = c(-10, max(sensorData, 550)),
+        breaks = seq(0, max(sensorData, 550), by = 100)
       )
       p <- ggplotly(p)
       p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
@@ -270,7 +278,24 @@ server <- function(input, output, session) {
       if (column_name %in% colnames(data)) {
         # Filter data for the selected DOY and sensor
         filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
-        
+        if (nrow(filtered_data) == 0) {
+          # Create a plot with a fixed y-axis scale from 0 to 550 and consistent x-axis limits and breaks
+          p <- ggplot(data = NULL, aes(x = NULL, y = NULL)) +
+            labs(
+              title = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
+              x = "Time (Hours)",
+              y = paste(marker_label, "Irradiance (W/m²)")
+            ) +
+            scale_x_continuous(
+              breaks = seq(0, 1440, by = 60),
+              labels = seq(0, 24, by = 1),
+              limits = c(0, 1440)
+            ) +
+            scale_y_continuous(limits = c(0, 550), breaks = seq(0, 550, by = 100))
+          p <- ggplotly(p)
+          p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
+          return(p)
+        }
         if(detrended()) {
           # Detrend the data
           detrended_sensor <- diff(filtered_data[, column_name])
@@ -306,6 +331,10 @@ server <- function(input, output, session) {
             labels = seq(0, 24, by = 1),
             limits = c(0, 1440)
           )
+          p <- p + scale_y_continuous(
+            limits = c(-10, max(filtered_data[column_name], 550)),
+            breaks = seq(0, max(filtered_data[column_name], 550), by = 100)
+          )
           p <- ggplotly(p)
           p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
           return(p)
@@ -316,6 +345,25 @@ server <- function(input, output, session) {
       column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
       
       filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
+      
+      if (nrow(filtered_data) == 0) {
+        # Create a plot with a fixed y-axis scale from 0 to 550 and consistent x-axis limits and breaks
+        p <- ggplot(data = NULL, aes(x = NULL, y = NULL)) +
+          labs(
+            title = paste(marker_label, "Irradiance", format(input$Date, "%m-%d-%Y")),
+            x = "Time (Hours)",
+            y = paste(marker_label, "Irradiance (W/m²)")
+          ) +
+          scale_x_continuous(
+            breaks = seq(0, 1440, by = 60),
+            labels = seq(0, 24, by = 1),
+            limits = c(0, 1440)
+          ) +
+          scale_y_continuous(limits = c(0, 550), breaks = seq(0, 550, by = 100))
+        p <- ggplotly(p)
+        p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
+        return(p)
+      }
       
       if (detrended()) {
         if (detrended()) {
@@ -355,6 +403,11 @@ server <- function(input, output, session) {
           breaks = seq(0, 1440, by = 60),
           labels = seq(0, 24, by = 1),
           limits = c(0, 1440)
+        )
+        
+        p <- p + scale_y_continuous(
+          limits = c(-10, max(filtered_data[column_name], 550)),
+          breaks = seq(0, max(filtered_data[column_name], 550), by = 100)
         )
         p <- ggplotly(p)
         p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
