@@ -7,14 +7,13 @@ library(openmeteo)
 library(ggplot2)
 library(plotly)
 
-faq_tab <- includeHTML("faq.html")
 # Define UI for the Shiny app
 ui <- navbarPage(
   "Solar Farm Dashboard",
   tabPanel("Dashboard", 
            fluidPage(
              tags$style(
-               HTML("body {background-color: #F5F7F8; margin: 0;}"),
+               HTML("body {background-color: #F5F7F8; margin: 0; padding: 0;}"),
                HTML(".container-fluid {padding-left: 0; padding-right: 0;}"),
              ),
              theme = bslib::bs_theme(bootswatch = "yeti"),
@@ -103,9 +102,477 @@ ui <- navbarPage(
              )
            )
   ),
-  tabPanel("FAQs", faq_tab)
-)
+  tabPanel("Solar Power Process", 
+           tags$head(
+             tags$meta(charset = "UTF-8"),
+             tags$meta(name = "viewport", content = "width=device-width, initial-scale=1.0"),
+             tags$title("West Tennessee Solar Farm Process"),
+             tags$style(HTML("
+         /* Reset some default styles to make the page look cleaner */
+        body, h1, p, ul, li {
+            margin: 0px;
+            padding: 0px;
+        }
 
+        body {
+            font-family: \"Asap\", sans-serif;
+            background-color: #00205B; /* UT Martin Navy Blue */
+            color: #FF671F; /* UT Martin Orange */
+            margin: 0px;
+            padding: 0px;
+        }
+
+        section {
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: #00205B; /* UT Martin Navy Blue */
+          color: #FF671F; /* UT Martin Orange */
+          margin: 0px;
+          padding: 0px;
+        }
+
+
+        section:nth-child(1) {
+            color: #FF671F; /* UT Martin Orange */
+            background: #00205B;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        section:nth-child(2) {
+            background: #FF671F; /* UT Martin Orange */
+            color: #00205B; /* UT Martin Navy Blue */
+            margin: 0px;
+            padding: 0px;
+        }
+
+        section:nth-child(3) {
+            color: #FF671F; /* UT Martin Orange */
+            background: #00205B;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        section:nth-child(4) {
+            background: #FF671F; /* UT Martin Orange */
+            color: #00205B; /* UT Martin Navy Blue */
+            margin: 0px;
+            padding: 0px;
+        }
+
+        section .container {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        section h1 {
+            font-size: 3rem;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        section h2 {
+            font-size: 40px;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        section .text-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        section .text-container .text-box {
+            flex-basis: calc(40% - 20px);
+            margin: 0px;
+            padding: 0px;
+            background: #FF671F; /* UT Martin Orange */
+            color: #00205B; /* UT Martin Navy Blue */
+        }
+
+        section .text-container .text-box h3 {
+            font-size: 30px;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        /* Add a blue border around the orange background steps */
+        section:nth-child(2) .text-container .text-box,
+        section:nth-child(4) .text-container .text-box {
+            border: 2px solid #00205B; /* UT Martin Navy Blue */
+        }
+
+        @media (min-width: 100vh;) {
+            section h1 {
+                font-size: 2rem;
+                text-align: center;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            section .text-container .text-box {
+                flex-basis: calc(100% - 40px);
+                margin: 0px;
+                padding: 0px;
+            }
+        }
+
+        /* Style for one text box on the left and one on the right */
+        section .text-container .text-box:nth-child(odd) {
+            order: 1;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        section .text-container .text-box:nth-child(even) {
+            order: 2;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .reveal {
+            position: relative;
+            transform: translateY(150px);
+            opacity: 0;
+            transition: 1s all ease;
+        }
+
+        .reveal.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    ")),
+             tags$script(HTML("
+        function reveal() {
+            var reveals = document.querySelectorAll(\".reveal\");
+
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add(\"active\");
+                } else {
+                    reveals[i].classList.remove(\"active\");
+                }
+            }
+        }
+
+        window.addEventListener(\"scroll\", reveal);
+    "))
+           ),
+           tags$body(
+             tags$section(
+               tags$h1("Scroll Down to Explore How Solar Energy Works ↓")
+             ),
+             tags$section(
+               class = "reveal",
+               tags$h2("Step 1: Sunlight to Solar Panels"),
+               tags$div(
+                 class = "text-container",
+                 tags$div(
+                   class = "text-box",
+                   tags$h3("Sunlight Energy"),
+                   tags$p("The sun sends powerful sunlight to our solar panels, providing energy.")
+                 ),
+                 tags$div(
+                   class = "text-box",
+                   tags$h3("Solar Panel Collection"),
+                   tags$p("Solar panels collect this energy and convert it into electricity, like a magic power generator!")
+                 )
+               )
+             ),
+             tags$section(
+               class = "reveal",
+               tags$h2("Step 2: Photovoltaic Cells"),
+               tags$div(
+                 class = "text-container",
+                 tags$div(
+                   class = "text-box",
+                   tags$h3("Solar Cells"),
+                   tags$p("Inside the solar panels, there are tiny cells called photovoltaic cells. They convert sunlight into electricity.")
+                 ),
+                 tags$div(
+                   class = "text-box",
+                   tags$h3("How It Works"),
+                   tags$p("These cells use their superpowers to turn sunlight photons into electrical current that we can use.")
+                 )
+               )
+             ),
+             tags$section(
+               class = "reveal",
+               tags$h2("Step 3: Inverter Transformation"),
+               tags$div(
+                 class = "text-container",
+                 tags$div(
+                   class = "text-box",
+                   tags$h3("Inverter Function"),
+                   tags$p("We use a special machine called an inverter to change the electricity from the panels into the type we use in our homes.")
+                 ),
+                 tags$div(
+                   class = "text-box",
+                   tags$h3("Conversion Process"),
+                   tags$p("The inverter acts like a translator, converting the solar energy into regular electricity for our appliances.")
+                 )
+               )
+             ),
+             tags$section(
+               class = "reveal",
+               tags$h2("Step 4: Power for You"),
+               tags$div(
+                 class = "text-container",
+                 tags$div(
+                   class = "text-box",
+                   tags$h3("Grid Connection"),
+                   tags$p("This electricity goes into a big power grid, and from there, it comes to your home to power your lights, TV, and more!")
+                 ),
+                 tags$div(
+                   class = "text-box",
+                   tags$h3("Your Home's Energy"),
+                   tags$p("Once the power reaches your house, it's ready to make your life brighter and more convenient.")
+                 )
+               )
+             )
+           ),
+           div(
+             style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
+             div(
+               style = "display: flex; align-items: center;",
+               img(
+                 src = "UT-System-Primary-Left-Align-RGB-Orange.png",
+                 height = "66px",
+                 width = "auto",
+                 style = "margin-right: 10px;"
+               ),
+               img(
+                 src = "cropped-UTRF-logo-w-dots.png",
+                 height = "40px",
+                 width = "auto",
+                 style = "margin-right: 10px;"
+               ),
+               img(
+                 src = "ut-martin-primary-align-left-151.png",
+                 height = "32px",
+                 width = "auto",
+                 style = "margin-right: 20px;"
+               )
+             ),
+             div(
+               h5("This project is supported by the University of Tennessee Research Foundation, the Department of Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.", style = "font-weight: bold; font-size: 12px;")
+             )
+           )
+           ),
+  tabPanel(
+    "FAQs",
+    tags$head(
+      tags$meta(charset = "UTF-8"),
+      tags$meta(name = "viewport"),
+      tags$title("Solar Farm FAQs"),
+      tags$style(
+        HTML(
+          "
+            html, body {
+            font-family: Arial, sans-serif;
+            background-color: #0B2341; /* Set background color for the entire body */
+            color: #FF8200;
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+            }
+
+            header {
+                text-align: center;
+                background-color: #0B2341;
+                color: #FF8200;
+                padding: 20px;
+                margin-top: -20px;
+            }
+
+            main {
+                max-width: 10000px;
+                margin: 0 auto;
+                padding: 0px;
+            }
+
+            section {
+                margin-bottom: 40px;
+            }
+
+            h2 {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+
+            ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            li {
+                margin-bottom: 20px;
+                padding: 10px;
+                border: 0px solid #ccc;
+                border-radius: 0px;
+                transition: background-color 0.3s ease;
+            }
+
+            li:hover {
+                background-color: transparent;
+            }
+
+            nav ul {
+                list-style-type: none;
+                padding: 0;
+                text-align: center;
+            }
+
+            nav li {
+                display: inline;
+                margin-right: 20px;
+            }
+            
+            .faq-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                color: #0B2341;
+                background-color: #FF8200;
+            }
+            "
+        )
+      )
+    ),
+    tags$body(
+      tags$header(
+        tags$h1("Solar Farm FAQs")
+      ),
+      tags$main(
+        tags$nav(
+          tags$ul(
+            tags$li(tags$a(href = "#solar-panels", "Solar Panels")),
+            tags$li(tags$a(href = "#energy-production", "Energy Production")),
+            tags$li(tags$a(href = "#solar-farms", "Solar Farms")),
+            tags$li(tags$a(href = "#irradiance", "Irradiance"))
+          )
+        ),
+        tags$div(
+          class = "faq-item",
+          tags$h2(id = "solar-panels", "Solar Panels"),
+          tags$ul(
+            tags$li(
+              tags$h3("How do solar panels work?"),
+              tags$p(
+                "Solar panels work by capturing sunlight and converting it into electricity through a process called the photovoltaic effect. Each solar panel consists of solar cells made of semiconductor materials, usually silicon, which generate a flow of electrons when exposed to sunlight. This flow of electrons creates direct current (DC) electricity, which is then converted into usable alternating current (AC) electricity through an inverter."
+              )
+            ),
+            tags$li(
+              tags$h3("What are the different types of solar panels?"),
+              tags$p(
+                "There are several types of solar panels, including monocrystalline, polycrystalline, and thin-film. Monocrystalline panels are known for their efficiency and sleek appearance, while polycrystalline panels are cost-effective. Thin-film panels are lightweight and flexible, making them suitable for specific applications."
+              )
+            )
+          )
+        ),
+        tags$div(
+          class = "faq-item",
+          tags$h2(id = "energy-production", "Energy Production"),
+          tags$ul(
+            tags$li(
+              tags$h3("How much energy can a solar farm produce?"),
+              tags$p(
+                "The energy production of a solar farm depends on several factors, including its size, location, efficiency of solar panels, and available sunlight. On average, a well-designed solar farm can generate enough electricity to power hundreds or even thousands of homes."
+              )
+            ),
+            tags$li(
+              tags$h3("What is the lifespan of solar panels?"),
+              tags$p(
+                "Solar panels typically have a lifespan of 25 to 30 years. However, they can continue to produce electricity at a reduced efficiency beyond that period. Regular maintenance and monitoring can help maximize their lifespan."
+              )
+            )
+          )
+        ),
+        tags$div(
+          class = "faq-item",
+          tags$h2(id = "solar-farms", "Solar Farms"),
+          tags$ul(
+            tags$li(
+              tags$h3("What is the role of a solar farm in renewable energy?"),
+              tags$p(
+                "Solar farms play a crucial role in generating clean and renewable energy. They harness sunlight to produce electricity without emitting greenhouse gases, contributing to a reduction in carbon emissions and combating climate change. Solar farms also support energy diversification and reduce dependence on fossil fuels."
+              )
+            ),
+            tags$li(
+              tags$h3("How are solar farms designed for optimal energy production?"),
+              tags$p(
+                "Solar farms are strategically designed to maximize energy production. Factors such as panel orientation, tilt angle, and spacing between panels are optimized to capture the most sunlight throughout the day. Additionally, advanced tracking systems can follow the sun's path for even greater efficiency."
+              )
+            )
+          )
+        ),
+        tags$div(
+          class = "faq-item",
+          tags$h2(id = "irradiance", "Irradiance"),
+          tags$ul(
+            tags$li(
+              tags$h3("What is solar irradiance and how does it affect energy production?"),
+              tags$p(
+                "Solar irradiance refers to the amount of sunlight energy received per unit area. It plays a critical role in energy production because the intensity of sunlight directly impacts the electricity output of solar panels. Higher irradiance levels lead to greater energy generation, while factors like shading and weather conditions can reduce irradiance."
+              )
+            ),
+            tags$li(
+              tags$h3("How is solar irradiance measured and monitored?"),
+              tags$p(
+                "Solar irradiance is measured using instruments called pyranometers or solar radiometers. These devices quantify the amount of solar energy reaching the Earth's surface. In solar farms, multiple sensors are often deployed to monitor irradiance levels continuously, allowing for real-time adjustments to maximize energy production."
+              )
+            )
+          )
+        ),
+      ),
+      tags$footer(
+        div(
+          style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
+          div(
+            style = "display: flex; align-items: center;",
+            img(
+              src = "UT-System-Primary-Left-Align-RGB-Orange.png",
+              height = "66px",
+              width = "auto",
+              style = "margin-right: 10px;"
+            ),
+            img(
+              src = "cropped-UTRF-logo-w-dots.png",
+              height = "40px",
+              width = "auto",
+              style = "margin-right: 10px;"
+            ),
+            img(
+              src = "ut-martin-primary-align-left-151.png",
+              height = "32px",
+              width = "auto",
+              style = "margin-right: 20px;"
+            )
+          ),
+          div(
+            h5(
+              "This project is supported by the University of Tennessee Research Foundation, the Department of Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.",
+              style = "font-weight: bold; font-size: 12px;"
+            )
+          )
+        )
+      )
+    )
+),
+)
 # Define server logic
 server <- function(input, output, session) {
   # Reactively reads data
