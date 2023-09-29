@@ -1,12 +1,4 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
+# Load necessary libraries
 library(shiny)
 library(leaflet)
 library(googledrive)
@@ -15,115 +7,106 @@ library(openmeteo)
 library(ggplot2)
 library(plotly)
 
-#https://seniordesign.shinyapps.io/shiny_dashboard/
-ui <- fluidPage(
-  # Changing Background Color
-  tags$style(
-    HTML("body {background-color: #F5F7F8; margin: 0;}"),  # Extend background to the edges
-    HTML(".container-fluid {padding-left: 0; padding-right: 0;}")  # Remove padding for the container
-  ),
-  # Adding Built-In Theme
-  theme = bslib::bs_theme(bootswatch = "yeti"),
-  # Header of Dashboard
-  tags$style(HTML("
-    .custom-title-panel {
-      height: 80px;
-      background-color: #0b2341;
-      color: #FF8200;
-      margin: 10;
-      padding: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-  ")),
-  div(
-    class = "custom-title-panel",
-    titlePanel(
-      h1("West Tennessee Solar Farm", align = "center"),
-      windowTitle = "West Tennessee Solar Farm Dashboard"
-    ),
-  ),
-  # Main Content Split into Two Columns
-  div(
-    style = "display: flex; flex-direction: column; min-height: 89vh;",
-    div(
-      style = "flex-grow: 1;",
-      # Contains map and forecast data
-      fluidRow(
-        column(
-          width = 5,
-          leafletOutput("map", width = "100%", height = "50vh"),
-          # Makes Forecast Table align with map
-          tags$style(HTML("#weather_info table { margin-left: auto; margin-right: 0;
-                          width: 100% !important;}")),
-          div(
-            h4("Tomorrow's Forecast", style = "text-align: center; font-weight: bold;"),
-            tableOutput("weather_info")
-          )
-        ),
-        # Contains tabsetPanel. Tabs = Live Data, Daily Data
-        column(
-          width = 7,
-          tabsetPanel(
-            id = "Sensor Tabs",
-            # Live Data Panel
-            tabPanel("Live Data",
-                     plotlyOutput("clickedSensorPlot"),
-            ),
-            # Daily Data Panel
-            tabPanel("Daily Data",
-                     # Allows User to pick which day's data to see
-                     dateInput("Date", "Start Date:", value = "2023-09-08",
-                               min = "2023-09-08"),
-                     plotlyOutput("dailySensorIrradiancePlot"),
-                     # Toggles between detrended and trended plots
+faq_tab <- includeHTML("faq.html")
+# Define UI for the Shiny app
+ui <- navbarPage(
+  "Solar Farm Dashboard",
+  tabPanel("Dashboard", 
+           fluidPage(
+             tags$style(
+               HTML("body {background-color: #F5F7F8; margin: 0;}"),
+               HTML(".container-fluid {padding-left: 0; padding-right: 0;}"),
+             ),
+             theme = bslib::bs_theme(bootswatch = "yeti"),
+             tags$style(HTML("
+        .custom-title-panel {
+          height: 80px;
+          background-color: #0b2341;
+          color: #FF8200;
+          margin: 0px;
+          padding: 10px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+          margin-top: -20px;
+        }
+        
+      ")),
+             div(
+               class = "custom-title-panel",
+               titlePanel(
+                 h1("West Tennessee Solar Farm", align = "center"),
+                 windowTitle = "West Tennessee Solar Farm Dashboard"
+               ),
+             ),
+             div(
+               style = "display: flex; flex-direction: column; min-height: 89vh;",
+               div(
+                 style = "flex-grow: 1;",
+                 fluidRow(
+                   column(
+                     width = 5,
+                     leafletOutput("map", width = "100%", height = "50vh"),
+                     tags$style(HTML("#weather_info table { margin-left: auto; margin-right: 0; width: 100% !important;}")),
                      div(
-                       actionButton("toggleDetrendedButton", "Toggle Detrended Data", style = "float: left;", class = "btn-default"),
-                       downloadButton("downloadDailyData", "Download Daily Data", class = "btn-default", style = "float: right;"),
+                       h4("Tomorrow's Forecast", style = "text-align: center; font-weight: bold;"),
+                       tableOutput("weather_info")
                      )
-            ),
-          ),
-        ),
-      )
-    ),
-    # Footer Section
-    div(
-      style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
-      # Left side with images
-      div(
-        style = "display: flex; align-items: center;",
-        img(
-          src = "UT-System-Primary-Left-Align-RGB-Orange.png",
-          height = "66px",
-          width = "auto",
-          style = "margin-right: 10px;"
-        ),
-        img(
-          src = "cropped-UTRF-logo-w-dots.png",
-          height = "40px",
-          width = "auto",
-          style = "margin-right: 10px;"
-        ),
-        img(
-          src = "ut-martin-primary-align-left-151.png",
-          height = "32px",
-          width = "auto",
-          style = "margin-right: 20px;"
-        )
-      ),
-      # Right side with text
-      div(
-        h5("This project is supported by the University of Tennessee Research Foundation, the Department of Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.", style = "font-weight: bold; font-size: 12px;")
-      )
-    )
-  )
+                   ),
+                   
+                   column(
+                     width = 7,
+                     style = "border: none;",
+                     tabsetPanel(
+                       id = "Sensor Tabs",
+                       tabPanel("Live Data", plotlyOutput("clickedSensorPlot")),
+                       tabPanel("Daily Data",
+                                dateInput("Date", "Start Date:", value = "2023-09-08", min = "2023-09-08"),
+                                plotlyOutput("dailySensorIrradiancePlot"),
+                                div(
+                                  actionButton("togglePowerProductionButton", "Irradiance", style = "float: left;", class = "btn-default"),
+                                  downloadButton("downloadDailyData", "Download Daily Data", class = "btn-default", style = "float: right;")
+                                )
+                       ),
+                     ),
+                   ),
+                 )
+               ),
+               div(
+                 style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
+                 div(
+                   style = "display: flex; align-items: center;",
+                   img(
+                     src = "UT-System-Primary-Left-Align-RGB-Orange.png",
+                     height = "66px",
+                     width = "auto",
+                     style = "margin-right: 10px;"
+                   ),
+                   img(
+                     src = "cropped-UTRF-logo-w-dots.png",
+                     height = "40px",
+                     width = "auto",
+                     style = "margin-right: 10px;"
+                   ),
+                   img(
+                     src = "ut-martin-primary-align-left-151.png",
+                     height = "32px",
+                     width = "auto",
+                     style = "margin-right: 20px;"
+                   )
+                 ),
+                 div(
+                   h5("This project is supported by the University of Tennessee Research Foundation, the Department of Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.", style = "font-weight: bold; font-size: 12px;")
+                 )
+               )
+             )
+           )
+  ),
+  tabPanel("FAQs", faq_tab)
 )
 
-
-
-
+# Define server logic
 server <- function(input, output, session) {
   # Reactively reads data
   read_csv_data <- function() {
@@ -260,7 +243,7 @@ server <- function(input, output, session) {
       }
       #Returns full plot
       return(p)
-    #If no marker has been clicked, do this default behavior
+      #If no marker has been clicked, do this default behavior
     } else {
       #Sets data to most recent day for sensor 1
       sensorData <- data[data$DOY == recent_doy, "Sensor.1"]
@@ -290,19 +273,25 @@ server <- function(input, output, session) {
     }
   })
   
-  #Initializes detrended button to regular data
-  detrended <- reactiveVal(FALSE)
-  
+  #Initializes PowerProduction button to regular data
+  PowerProduction <- reactiveVal(FALSE)
+  currentButtonText <- reactiveVal("Irradiance")
   #When the button is clicked, change states
-  observeEvent(input$toggleDetrendedButton, {
-    detrended(!detrended())
+  observeEvent(input$togglePowerProductionButton, {
+    PowerProduction(!PowerProduction())
+    if(currentButtonText() == "Irradiance") {
+      currentButtonText("Power Production")
+    } else {
+      currentButtonText("Irradiance")
+    }
+    updateActionButton(session, "togglePowerProductionButton", label = currentButtonText())
   })
   
-  #If the button is in a detrended state, then output the detrended data
-  detrended_data <- reactive({
+  #If the button is in a PowerProduction state, then output the PowerProduction data
+  PowerProduction_data <- reactive({
     data <- csv_data()
-    if (detrended()) {
-      data$DetrendedValue <- detrend(data$irradiance)
+    if (PowerProduction()) {
+      data$PowerProductionValue <- data$irradiance * 0.20
       return(data)
     } else {
       return(NULL)
@@ -353,21 +342,21 @@ server <- function(input, output, session) {
           p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
           return(p)
         }
-        #Checks whether it is in a detrended state
-        if(detrended()) {
+        #Checks whether it is in a PowerProduction state
+        if(PowerProduction()) {
           # Detrend the data
-          detrended_sensor <- diff(filtered_data[, column_name])
+          PowerProduction_sensor <- filtered_data[[column_name]] * 0.20
           
           #Converts data to manipulable format
-          p_data <- data.frame(MINUTE = filtered_data$MINUTE[-nrow(filtered_data)], DetrendedValue = detrended_sensor)
+          p_data <- data.frame(MINUTE = filtered_data$MINUTE, PowerProductionValue = PowerProduction_sensor)
           
-          # Create the plot with MINUTE on the X-axis and detrended sensor irradiance on the Y-axis
-          p <- ggplot(data = p_data, aes(x = MINUTE, y = DetrendedValue)) +
+          # Create the plot with MINUTE on the X-axis and PowerProduction sensor irradiance on the Y-axis
+          p <- ggplot(data = p_data, aes(x = MINUTE, y = PowerProductionValue)) +
             geom_line() +
             labs(
-              title = paste(marker_label, "Detrended Irradiance", format(input$Date, "%m-%d-%Y")),
+              title = paste(marker_label, "Power Production", format(input$Date, "%m-%d-%Y")),
               x = "Time (Hours)",
-              y = paste(marker_label, "Detrended Irradiance (W/m²)")
+              y = paste(marker_label, "Power Production (W)")
             )
           #Changes x scale
           p <- p + scale_x_continuous(
@@ -380,7 +369,7 @@ server <- function(input, output, session) {
           #Disables zoom and drag
           p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
           return(p)
-        #If not in detrended state, plot regular data
+          #If not in PowerProduction state, plot regular data
         } else {
           #Creates plot
           p <- ggplot(data = filtered_data, aes(x = MINUTE, y = .data[[column_name]])) +
@@ -408,8 +397,8 @@ server <- function(input, output, session) {
           return(p)
         }
       }
-    #If no marker has been clicked
-    #Default behavior
+      #If no marker has been clicked
+      #Default behavior
     } else {
       marker_label <- "Sensor 1"
       column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
@@ -441,21 +430,21 @@ server <- function(input, output, session) {
         return(p)
       }
       
-      if (detrended()) {
-        if (detrended()) {
+      if (PowerProduction()) {
+        if (PowerProduction()) {
           # Detrend the data
-          detrended_sensor <- diff(filtered_data[, column_name])
+          PowerProduction_sensor <- filtered_data[, column_name] * 0.20
           
           #Converts to manipulable data
-          p_data <- data.frame(MINUTE = filtered_data$MINUTE[-nrow(filtered_data)], DetrendedValue = detrended_sensor)
+          p_data <- data.frame(MINUTE = filtered_data$MINUTE, PowerProductionValue = PowerProduction_sensor)
           
-          # Create the plot with MINUTE on the X-axis and detrended sensor irradiance on the Y-axis
-          p <- ggplot(data = p_data, aes(x = MINUTE, y = DetrendedValue)) +
+          # Create the plot with MINUTE on the X-axis and PowerProduction sensor irradiance on the Y-axis
+          p <- ggplot(data = p_data, aes(x = MINUTE, y = PowerProductionValue)) +
             geom_line() +
             labs(
-              title = paste(marker_label, "Detrended Irradiance", format(input$Date, "%m-%d-%Y")),
+              title = paste(marker_label, "Power Production", format(input$Date, "%m-%d-%Y")),
               x = "Time (Hours)",
-              y = paste(marker_label, "Detrended Irradiance (W/m²)")
+              y = paste(marker_label, "Power Production (W)")
             )
           #Changes x scale
           p <- p + scale_x_continuous(
@@ -468,7 +457,7 @@ server <- function(input, output, session) {
           p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
           return(p)
         }
-      #If button is not in detrended state
+        #If button is not in PowerProduction state
       } else {
         # Use trended data (no detrending)
         # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
@@ -552,7 +541,7 @@ server <- function(input, output, session) {
       #Averages hourly values
       average_cloud_cover <- round(mean(weather_data$hourly_cloudcover, na.rm = TRUE), 2)
       average_temperature <- round(mean(weather_data$hourly_temperature_2m, na.rm = TRUE), 2)
-
+      
       sky_weather <- head(weather_data$daily_weathercode, 1)
       uv_radiation <- head(weather_data$daily_shortwave_radiation_sum, 1)
       
@@ -593,9 +582,9 @@ server <- function(input, output, session) {
     }
     #Creates table
     weather_info <- data.frame(
-        Date = format(Sys.Date() + 1, format = "%Y-%m-%d"),
-        Metric = c("Predicted Average Cloud Cover (%)", "Predicted Average Temperature °F", "Weather Outlook", "Predicted UV Radiation"),
-        Value = c(cloud_cover,temperature, sky_weather, uv)
+      Date = format(Sys.Date() + 1, format = "%Y-%m-%d"),
+      Metric = c("Predicted Average Cloud Cover (%)", "Predicted Average Temperature °F", "Weather Outlook", "Predicted UV Radiation"),
+      Value = c(cloud_cover,temperature, sky_weather, uv)
     )
     
     return(weather_info)
@@ -603,5 +592,6 @@ server <- function(input, output, session) {
   #When closing out of the browser, the app automatically stops
   session$onSessionEnded(stopApp)
 }
-#Run the app
-shinyApp(ui, server)
+
+# Run the Shiny app
+shinyApp(ui = ui, server = server)
