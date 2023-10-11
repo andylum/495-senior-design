@@ -51,7 +51,11 @@ ui <- navbarPage(
                      div(
                        h4("Tomorrow's Forecast", style = "text-align: center; font-weight: bold;"),
                        tableOutput("weather_info")
-                     )
+                     ),
+                       div(
+                         style = "background-color: white; padding: 10px; border-radius: 15px; width: 100%; text-align: center; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin-top: 0px;",
+                         HTML("<b>Irradiance</b> is a measure of how much energy from sunlight or other forms of light falls on a given area, typically expressed per square meter. It helps us understand how much light energy is reaching a specific spot, such as a solar panel.")
+                       )
                    ),
                    
                    column(
@@ -59,19 +63,37 @@ ui <- navbarPage(
                      style = "border: none;",
                      tabsetPanel(
                        id = "Sensor Tabs",
-                       tabPanel("Live Data", plotlyOutput("clickedSensorPlot")),
+                       tabPanel("Live Data", plotlyOutput("clickedSensorPlot"),
+                                style = "margin-top: -10px;"),
                        tabPanel("Daily Data",
                                 dateInput("Date", "Start Date:", value = "2023-09-08", min = "2023-09-08"),
                                 plotlyOutput("dailySensorIrradiancePlot"),
-                                div(
-                                  actionButton("togglePowerProductionButton", "Irradiance", style = "float: left;", class = "btn-default"),
-                                  downloadButton("downloadDailyData", "Download Daily Data", class = "btn-default", style = "float: right;")
+                                fluidRow(
+                                  div(
+                                    actionButton("togglePowerProductionButton", "Irradiance", style = "float: left;", class = "btn-default"),
+                                    downloadButton("downloadDailyData", "Download Daily Data", class = "btn-default", style = "float: right;")
+                                  )
                                 )
                        ),
                      ),
+                     div(
+                       style = "background-color: white; padding: 10px; border-radius: 15px; text-align: left; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin: 20px; display: flex; flex-direction: column; align-items: center;",
+                       uiOutput("total_production_text"),
+                       img(
+                         src = "front-page-illo-02-e1528216037613.png",
+                         height = "auto",
+                         width = "100%"
+                       )
+                     )
                    ),
-                 )
+                 ),
                ),
+               # Bubble text for both Power production and Irradiance
+               # div(
+               #   div(
+               #     style = "background-color: white; padding: 10px; border-radius: 15px; width: 100%; text-align: center; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin-top: 0px;",
+               #     HTML("<b>Irradiance</b> is a measure of how much energy from sunlight or other forms of light falls on a given area, typically expressed per square meter. It helps us understand how much light energy is reaching a specific spot, such as a solar panel.")
+               #   )
                div(
                  style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
                  div(
@@ -193,7 +215,6 @@ ui <- navbarPage(
             flex-basis: calc(40% - 20px);
             margin: 0px;
             padding: 0px;
-            background: #FF671F; /* UT Martin Orange */
             color: #00205B; /* UT Martin Navy Blue */
         }
 
@@ -203,12 +224,6 @@ ui <- navbarPage(
             text-transform: uppercase;
             margin: 0px;
             padding: 0px;
-        }
-
-        /* Add a blue border around the orange background steps */
-        section:nth-child(2) .text-container .text-box,
-        section:nth-child(4) .text-container .text-box {
-            border: 2px solid #00205B; /* UT Martin Navy Blue */
         }
 
         @media (min-width: 100vh;) {
@@ -231,12 +246,14 @@ ui <- navbarPage(
             order: 1;
             margin: 0px;
             padding: 0px;
+            color: #FFFFFF;
         }
 
         section .text-container .text-box:nth-child(even) {
             order: 2;
             margin: 0px;
             padding: 0px;
+            color: #FFFFFF;
         }
 
         .reveal {
@@ -443,10 +460,10 @@ ui <- navbarPage(
             .faq-item {
                 display: flex;
                 flex-direction: column;
-                align-items: center;
-                text-align: center;
+                align-items: left;
+                text-align: left;
+                font-size: 18px;
                 color: #0B2341;
-                background-color: #FF8200;
             }
             "
         )
@@ -758,7 +775,7 @@ server <- function(input, output, session) {
   PowerProduction_data <- reactive({
     data <- csv_data()
     if (PowerProduction()) {
-      data$PowerProductionValue <- data$irradiance * 0.20
+      data$PowerProductionValue <- max(0, -0.335 + 0.058 * data$irradiance)
       return(data)
     } else {
       return(NULL)
@@ -812,7 +829,7 @@ server <- function(input, output, session) {
         #Checks whether it is in a PowerProduction state
         if(PowerProduction()) {
           # Detrend the data
-          PowerProduction_sensor <- filtered_data[[column_name]] * 0.20
+          PowerProduction_sensor <- max(0, filtered_data[[column_name]] * 0.058 - 0.335)
           
           #Converts data to manipulable format
           p_data <- data.frame(MINUTE = filtered_data$MINUTE, PowerProductionValue = PowerProduction_sensor)
@@ -1055,6 +1072,26 @@ server <- function(input, output, session) {
     )
     
     return(weather_info)
+  })
+  
+  total_production <- reactive({
+    data <- csv_data()
+    daily <- sum(data[data$DOY == max(data$DOY), "SensorSum"])
+    weekly <- sum(data[data$DOY >= max(data$DOY) - 6 & data$DOY <= max(data$DOY), "SensorSum"])
+    monthly <- sum(data[data$DOY >= max(data$DOY) - 30 & data$DOY <= max(data$DOY), "SensorSum"])
+    return(list(daily = daily, weekly = weekly, monthly = monthly))
+  })
+  
+  output$total_production_text <- renderUI({
+    daily_sum <- total_production()$daily
+    weekly_sum <- total_production()$weekly
+    monthly_sum <- total_production()$monthly
+    
+    HTML(paste(
+      "The West Tennessee Solar Farm has powered", floor(daily_sum / 30), "houses today.",
+      "The West Tennessee Solar Farm has powered", floor(weekly_sum / 30), "houses in the past 7 days.",
+      "The West Tennessee Solar Farm has powered", floor((weekly_sum * 4) / 30), "houses in the past 31 days."
+    ))
   })
   #When closing out of the browser, the app automatically stops
   session$onSessionEnded(stopApp)
