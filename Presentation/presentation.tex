@@ -61,8 +61,6 @@
 
 %%%%%%%%%%% END MACROS %%%%%%%%%%%%%%%%%%%%
 
-
-
 \begin{document}
 
 \title{Revitalizing Solar Insights: A Dashboard for West Tennessee Solar Farm}
@@ -75,60 +73,157 @@
 
 \frame{\titlepage}
 \begin{frame}[c] % Use [c] to center the content vertically
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   TABLE OF CONTENTS           %
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frametitle{Table of Contents} 
+\begin{enumerate}
+    \item<1-> Introduction
+    \begin{itemize}
+        \item<2-> Motivation
+    \end{itemize}
 
-\frametitle{Introduction} 
-\vfill 
-\begin{block}{Motivation}
- Can we build an interactive dashboard to improve research and education accessibility, optimize power production, and advance sustainable energy practices?
-\end{block}
-\vfill
+    \item<3-> R-Shiny \& Functionalities
+    \begin{itemize}
+        \item<4-> What is R-Shiny?
+        \item<5-> Functionalities
+    \end{itemize}
+
+    \item<6-> List of Technologies
+    \begin{itemize}
+        \item<7-> Technologies used to supply the dashboard
+    \end{itemize}
+
+    \item<8-> Project Goals
+    \begin{itemize}
+        \item<9-> What do we want to accomplish overall?
+    \end{itemize}
+
+    \item<10-> Dashboard Demo
+
+    \item<11-> Results
+    %\begin{itemize}
+        %\item<12-> What went well? What didn't go well?
+    %\end{itemize}
+
+    \item<12-> Conclusion
+    %\begin{itemize}
+        %\item<14-> What did we accomplish? What did we learn?
+    %\end{itemize}
+
+    \item<13-> Future Work
+
+    \item<14-> Contact Information
+\end{enumerate}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   INTRODUCTION / MOTIVATION   %
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frameT{Introduction}{
+    \vfill 
+    \begin{block}{Motivation}
+     Can we build an interactive dashboard to improve research and education accessibility, optimize power production, and advance sustainable energy practices?
+    \end{block}
+    \vfill
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   R-SHINY & FUNCTIONALITIES   %
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{}
 \frameT{R-Shiny \& Functionalities}{
     \begin{enumerate}
-        \item Provides an easier and more integrated way to creating web-based dashboards without needing to learn web development languages like HTML.
-        \item Provides Real-Time Data Visualization, Interactive Maps, Sensor Information Panel, Historical Data Analysis, User-Friendly Interface, Responsive Design, Dashboard Hosting and Export Data.
+        \item<1-> Provides an easier and more integrated way to creating web-based dashboards without needing to learn web development languages like HTML.
+        \item<2-> Provides the following functionalities:
+        \begin{itemize}
+            \item<3-> Real-Time Data Visualization
+            \item<4-> Interactive Maps
+            \item<5-> Sensor Information Panel
+            \item<6-> Historical Data Analysis
+            \item<7-> User-Friendly Interface
+            \item<8-> Responsive Design
+            \item<9-> Dashboard Hosting
+            \item<10-> Export Data
+        \end{itemize}
     \end{enumerate}
 }
-\section{}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   LIST OF TECHNOLOGIES        %
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{}
 \frameT{List of Technologies}{
   \begin{enumerate}
-      \item \textbf{MySQL}: stores and manages sensor data in a table containing minute by minute data separated by data for each sensor.
-      \item \textbf{Python}: Retrieves data from the MySQL database and updates a Google Drive CSV for data simulation.
-      \item \textbf{R-Shiny}: Develops an interactive dashboard for data visualization.
-      \item \textbf{Shinyapps.io}: Hosts a web server to allow users from all major operating systems to be able to access the dashboard.
-      \item \textbf{Google Cloud Console}: Safeguards API information for enhanced data security.
+      \item<1-> \textbf{MySQL}\par
+      stores and manages sensor data in a table containing minute by minute data separated by data for each sensor.
+      \item<2-> \textbf{Python}\par
+      Retrieves data from the MySQL database and updates a Google Drive CSV for data simulation.
+      \item<3-> \textbf{R-Shiny}\par
+      Develops an interactive dashboard for data visualization.
+      \item<4-> \textbf{Shinyapps.io}\par
+      Hosts a web server to allow users from all major operating systems to be able to access the dashboard.
+      \item<5-> \textbf{Google Cloud Console}\par
+      Safeguards API information for enhanced data security.
   \end{enumerate}
 }
-  %One or more slides of \emph{background} or %\emph{motivation}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   PROJECT GOALS               %
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{}
 \frameT{Project Goals} {
   \begin{enumerate}
-      \item \textbf{Streamlined Data Pipeline}
+      \item<1-> \textbf{Streamlined Data Pipeline}
       %Achieve efficiency by establishing a robust data pipeline from MySQL to Python, culminating in organized data storage within Google Drive's CSV format, seamlessly facilitating further analysis within the R-Shiny environment.
-      \item \textbf{Continuous Data Maintenance}
+      \item<2-> \textbf{Continuous Data Maintenance}
       %Elevate data integrity through the implementation of an automated Python script, equipped with comprehensive error handling capabilities, ensuring the continuous and real-time updating of Google Drive's CSV repository to provide a reactive data environment.
-      \item \textbf{R-Shiny Dashboard}: encompasses all of the aforementioned functionalities.
-      \item \textbf{Cross-Platform Accessibility}: Ensure inclusivity by designing a webpage that accommodates diverse laptop operating systems, guaranteeing a seamless user experience.
+      \item<3-> \textbf{R-Shiny Dashboard}\par
+      encompasses all of the aforementioned functionalities.
+      \item<4-> \textbf{Cross-Platform Accessibility}\par 
+      Ensure inclusivity by designing a webpage that accommodates diverse laptop operating systems, guaranteeing a seamless user experience.
 
         \bigskip
   \end{enumerate}
 }
-
-%\begin{frame}[fragile]
-%\frametitle{Technologies Continued}
-%\begin{verbatim}
-%Verbatim is a great way of enumerating code/algorithmic ideas.
-%\end{verbatim}
-%\end{frame}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   DASHBOARD DEMO              %
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frameT{Dashboard Demo} {
   \href{https://seniordesign.shinyapps.io/shiny_dashboard/}{\includegraphics[width=\linewidth]{Dashboard.png}}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   FOR JOSH                    %
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frameT{Future Work} {
+    \begin{enumerate}
+        \item<1-> \textbf{Predictive Analysis}
+        \item<2-> \textbf{Notifications}
+        \item<3-> \textbf{Video Tutorial}
+    \end{enumerate}
+}
 
+\frameT{Conclusion} {
+    The dashboard creates:\\
+    \begin{enumerate}
+        \item An educational tool for people to learn about the Solar Farm Process
+        \item A research tool that provides public data to study
+    \end{enumerate}
+}
 % \begin{frame}[fragile]
 %   \frametitle{Power Consumption}
 %   \begin{figure}[ht]
@@ -180,22 +275,4 @@
     %\includegraphics[width=4cm]%{figures/6AnLddq.png}
   \end{center}
 }
-
-%\frameF{fragile test} {
-%}
-
-%% \frameF{Prolog Family Tree} {
-%% \begin{verbatim}
-%% hello
-%% \end{verbatim}
-
-
-
-%% }
-
-%Empty Page
-%\frameT{Frame 1}{
-%}  
-
-
 \end{document}
