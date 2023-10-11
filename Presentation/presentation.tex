@@ -4,7 +4,7 @@
 
 \usepackage{verbatim}
 \usepackage{graphicx}
-
+\usepackage{tcolorbox}
 %% UTM Colors
 \definecolor{UTMblue}{rgb}{0.043137, 0.137254, 0.254901}
 \definecolor{UTMorange}{rgb}{1.0, 0.509803, 0}
@@ -67,113 +67,115 @@
 
 \title{Revitalizing Solar Insights: A Dashboard for West Tennessee Solar Farm}
 
-\author{Joshua Chamberlain \& Andy Lum}
+\author{Joshua Chamberlain \& Andy Lum \\ \vspace{0.1in} Mentor: Dr.~Justin R.~Sims}
 \institute{UT Martin}
 \date{\today}
 
-%%%%%%%%%%% BEGIN TITLE %%%%%%%%%%%%%%%%%%
+
+
 \frame{\titlepage}
+\begin{frame}[c] % Use [c] to center the content vertically
 
- %\section{Outline}
-%%%%%%%%%%%% END TITLE  %%%%%%%%%%%%%%%%%%
+\frametitle{Introduction} 
+\vfill 
+\begin{block}{Motivation}
+ Can we build an interactive dashboard to improve research and education accessibility, optimize power production, and advance sustainable energy practices?
+\end{block}
+\vfill
+\end{frame}
 
-
-\section{Introduction}
-\frameT{Motivation} {
-  %List some of your motivations here!
-  %\bigskip
-  \begin{enumerate}
-    \item \textbf{Ford Plant Proximity}: Highlighting the solar farm's proximity to the new Ford plant can emphasize the importance of sustainable energy sources in modern industrial processes.
-      \bigskip
-    \item \textbf{Revitalization of a Local Site}: The University of Tennessee Research Foundation's interest in revitalizing the West Tennessee Solar Farm presents an opportunity for our project to directly contribute to local economic growth. 
-  \end{enumerate}
-
-  \bigskip
-  
-  %One or more slides of \emph{background} or %\emph{motivation}.
+\section{}
+\frameT{R-Shiny \& Functionalities}{
+    \begin{enumerate}
+        \item Provides an easier and more integrated way to creating web-based dashboards without needing to learn web development languages like HTML.
+        \item Provides Real-Time Data Visualization, Interactive Maps, Sensor Information Panel, Historical Data Analysis, User-Friendly Interface, Responsive Design, Dashboard Hosting and Export Data.
+    \end{enumerate}
 }
-
-\frameT{Project Goals} {
-  \begin{enumerate}
-      \item Efficient data pipeline: MySQL to Python to Google Drive CSV to R-Shiny.
-      \item Automated Python script updates Google Drive CSV with error handling.
-      \item Implement a R-Shiny Dashboard that encompasses all of the aforementioned functionalities.
-      \item Inclusive webpage for diverse laptop OS users
-
-        \bigskip
-      \emph{Note: add stretch goals}
-  \end{enumerate}
-}
-
-\section{Technologies Used}
+\section{}
 
 \frameT{List of Technologies}{
+  \begin{enumerate}
+      \item \textbf{MySQL}: stores and manages sensor data in a table containing minute by minute data separated by data for each sensor.
+      \item \textbf{Python}: Retrieves data from the MySQL database and updates a Google Drive CSV for data simulation.
+      \item \textbf{R-Shiny}: Develops an interactive dashboard for data visualization.
+      \item \textbf{Shinyapps.io}: Hosts a web server to allow users from all major operating systems to be able to access the dashboard.
+      \item \textbf{Google Cloud Console}: Safeguards API information for enhanced data security.
+  \end{enumerate}
+}
+  %One or more slides of \emph{background} or %\emph{motivation}.
+\section{}
+\frameT{Project Goals} {
+  \begin{enumerate}
+      \item \textbf{Streamlined Data Pipeline}
+      %Achieve efficiency by establishing a robust data pipeline from MySQL to Python, culminating in organized data storage within Google Drive's CSV format, seamlessly facilitating further analysis within the R-Shiny environment.
+      \item \textbf{Continuous Data Maintenance}
+      %Elevate data integrity through the implementation of an automated Python script, equipped with comprehensive error handling capabilities, ensuring the continuous and real-time updating of Google Drive's CSV repository to provide a reactive data environment.
+      \item \textbf{R-Shiny Dashboard}: encompasses all of the aforementioned functionalities.
+      \item \textbf{Cross-Platform Accessibility}: Ensure inclusivity by designing a webpage that accommodates diverse laptop operating systems, guaranteeing a seamless user experience.
+
+        \bigskip
+  \end{enumerate}
+}
+
+%\begin{frame}[fragile]
+%\frametitle{Technologies Continued}
+%\begin{verbatim}
+%Verbatim is a great way of enumerating code/algorithmic ideas.
+%\end{verbatim}
+%\end{frame}
+
+\frameT{Dashboard Demo} {
+  \href{https://seniordesign.shinyapps.io/shiny_dashboard/}{\includegraphics[width=\linewidth]{Dashboard.png}}
 }
 
 
+% \begin{frame}[fragile]
+%   \frametitle{Power Consumption}
+%   \begin{figure}[ht]
+%     \begin{minipage}[b]{0.53\linewidth}
+%       \centering
+%       Minipages are a great way to
+%     \end{minipage}
+%     \hspace{0.5cm}
+%     \begin{minipage}[b]{0.4\linewidth}
+%       \centering
+%       Line up side-by-side content.
 
-\begin{frame}[fragile]
-\frametitle{Technologies Continued}
-\begin{verbatim}
-Verbatim is a great way of enumerating code/algorithmic ideas.
-\end{verbatim}
-\end{frame}
-
-\section{R-Shiny}
-\frameT{Leaflet Map of Solar Farm} {
-  %% \includegraphics[width=.7\linewidth]{figures/image.pdf}
-}
-
-
-\begin{frame}[fragile]
-  \frametitle{Irradiance Plots}
-  \begin{figure}[ht]
-    \begin{minipage}[b]{0.53\linewidth}
-      \centering
-      Minipages are a great way to
-    \end{minipage}
-    \hspace{0.5cm}
-    \begin{minipage}[b]{0.4\linewidth}
-      \centering
-      Line up side-by-side content.
-
-    \end{minipage}
-  \end{figure}
+%     \end{minipage}
+%   \end{figure}
   
-\end{frame}
+% \end{frame}
 
-\section{Results}
-\frameT{Results} {
-  Describe any results of your work here.
+% \section{Results}
+% \frameT{Results} {
+%   Describe any results of your work here.
 
-  \bigskip
+%   \bigskip
 
-  Things that worked?
+%   Things that worked?
 
-  \bigskip
+%   \bigskip
 
-  Things that didn't work?
-}
-\section{Conclusion}
-\frameT{Conclusions} {
-  Some bullet points here to wrap things up.
-}
+%   Things that didn't work?
+% }
+% \section{Conclusion}
+% \frameT{Conclusions} {
+%   Some bullet points here to wrap things up.
+% }
 \section{Contact Information}
 \frameT{Any Questions?} {
   
-  \begin{center}
-    Questions?
-  \end{center}
+
   \begin{center}
     Comments?
   \end{center}
 
   \bigskip
 
-  \textbf{Joshua Chamberlain}: \href{mailto:joshpcham@ut.utm.edu}{joshpcham@ut.utm.edu}.
+  \textbf{Joshua Chamberlain}: \href{mailto:jospcham@ut.utm.edu}{jospcham@ut.utm.edu}.
   \bigskip
   
-  \textbf{Andy Lum}: \href{mailto:andylum77@yahoo.com}{andylum77@yahoo.com}.
+  \textbf{Andy Lum}: \href{mailto:andlum@ut.utm.edu}{andlum@ut.utm.edu}.
   \begin{center}
     %\includegraphics[width=4cm]%{figures/6AnLddq.png}
   \end{center}
