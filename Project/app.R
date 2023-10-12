@@ -86,7 +86,6 @@ ui <- navbarPage(
                        )
                      )
                    ),
-<<<<<<< HEAD
                  ),
                ),
                # Bubble text for both Power production and Irradiance
@@ -95,32 +94,6 @@ ui <- navbarPage(
                #     style = "background-color: white; padding: 10px; border-radius: 15px; width: 100%; text-align: center; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin-top: 0px;",
                #     HTML("<b>Irradiance</b> is a measure of how much energy from sunlight or other forms of light falls on a given area, typically expressed per square meter. It helps us understand how much light energy is reaching a specific spot, such as a solar panel.")
                #   )
-=======
-                   # Bubble text for both Power production and Irradiance
-                   div(
-                     style = "display: flex; justify-content: space-between; align-items: flex-start; width: 100%;",
-                     div(
-                       style = "width: 35%;",
-                       div(
-                         style = "background-color: white; padding: 10px; border-radius: 15px; text-align: left; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black;",
-                         HTML("The West Tennessee Solar Farm generates enough energy to power 11 homes each week, 42 homes each month, and <b>500 homes each year</b>."),
-                         img(
-                           src = "front-page-illo-02-e1528216037613.png",
-                           height = "100px",
-                           width = "100%"
-                         )
-                       )
-                     ),
-                     div(
-                       style = "background-color: white; padding: 10px; border-radius: 15px; width: 63%; text-align: center; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin-top: 30px;",
-                       HTML("<b>Irradiance</b> is a measure of how much energy from sunlight or other forms of light falls on a given area, typically expressed per square meter. It helps us understand how much light energy is reaching a specific spot, such as a solar panel.")
-                     )
-                   )
-    
-                 )
-               ),
-               # Bottom Border that includes UT System, UT Research Foundation, UTM Logo, and copyright message.
->>>>>>> 999739566ed91d3d2994876da05f3752915487a9
                div(
                  style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
                  div(
@@ -415,7 +388,7 @@ ui <- navbarPage(
                h5("This project is supported by the University of Tennessee Research Foundation, the Department of Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.", style = "font-weight: bold; font-size: 12px;")
              )
            )
-  ),
+           ),
   tabPanel(
     "FAQs",
     tags$head(
@@ -615,7 +588,7 @@ ui <- navbarPage(
         )
       )
     )
-  ),
+),
 )
 # Define server logic
 server <- function(input, output, session) {
