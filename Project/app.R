@@ -1090,9 +1090,9 @@ server <- function(input, output, session) {
     monthly_sum <- total_production()$monthly
     
     HTML(paste(
-      "The West Tennessee Solar Farm has powered", floor(daily_sum / 30), "houses or ", floor(daily_sum / 11.81), " electric cars today.",
-      "The West Tennessee Solar Farm has powered", floor(weekly_sum / 30), "houses or ", floor(weekly_sum / 11.81), " electric cars in the past 7 days.",
-      "The West Tennessee Solar Farm has powered", floor((weekly_sum * 4) / 30), "houses or ", floor((weekly_sum * 4) / 11.81), " electric cars in the past 31 days."
+      "The West Tennessee Solar Farm has powered", floor(daily_sum / 60 / 30), "houses or ", floor(daily_sum / 60 / 11.81), " electric cars today.",
+      "The West Tennessee Solar Farm has powered", floor(weekly_sum / 60 / 30), "houses or ", floor(weekly_sum / 60 / 11.81), " electric cars in the past 7 days.",
+      "The West Tennessee Solar Farm has powered", floor((weekly_sum * 4) / 60 / 30), "houses or ", floor((weekly_sum * 4) / 60 / 11.81), " electric cars in the past 31 days."
     ))
   })
   #When closing out of the browser, the app automatically stops
