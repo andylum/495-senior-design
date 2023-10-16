@@ -7,7 +7,6 @@ library(openmeteo)
 library(ggplot2)
 library(plotly)
 
-# Define UI for the Shiny app
 ui <- navbarPage(
   "Solar Farm Dashboard",
   tabPanel("Dashboard", 
@@ -29,6 +28,14 @@ ui <- navbarPage(
           align-items: center;
           margin-bottom: 20px;
           margin-top: -20px;
+        }
+        
+        .navbar .nav {
+          align-items: center;
+        }
+        .nav.navbar-nav > li > a {
+          align-items: center;
+          margin-top: 20px; /* Add padding to vertically center align the tab labels */
         }
         
       ")),
