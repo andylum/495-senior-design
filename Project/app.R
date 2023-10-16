@@ -77,7 +77,7 @@ ui <- navbarPage(
                        ),
                      ),
                      div(
-                       style = "background-color: white; padding: 10px; border-radius: 15px; text-align: left; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin: 20px; display: flex; flex-direction: column; align-items: center;",
+                       style = "background-color: white; padding: 10px; border-radius: 15px; text-align: left; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin: 20px; height: auto; width: auto; align-items: center;",
                        uiOutput("total_production_text"),
                        img(
                          src = "front-page-illo-02-e1528216037613.png",
@@ -88,12 +88,6 @@ ui <- navbarPage(
                    ),
                  ),
                ),
-               # Bubble text for both Power production and Irradiance
-               # div(
-               #   div(
-               #     style = "background-color: white; padding: 10px; border-radius: 15px; width: 100%; text-align: center; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin-top: 0px;",
-               #     HTML("<b>Irradiance</b> is a measure of how much energy from sunlight or other forms of light falls on a given area, typically expressed per square meter. It helps us understand how much light energy is reaching a specific spot, such as a solar panel.")
-               #   )
                div(
                  style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
                  div(
@@ -159,28 +153,29 @@ ui <- navbarPage(
         section:nth-child(1) {
             color: #FF671F; /* UT Martin Orange */
             background: #00205B;
-            margin: 0px;
+            margin: -20px;
             padding: 0px;
+            
         }
 
         section:nth-child(2) {
             background: #FF671F; /* UT Martin Orange */
             color: #00205B; /* UT Martin Navy Blue */
-            margin: 0px;
+            margin: -20px;
             padding: 0px;
         }
 
         section:nth-child(3) {
             color: #FF671F; /* UT Martin Orange */
             background: #00205B;
-            margin: 0px;
+            margin: -20px;
             padding: 0px;
         }
 
         section:nth-child(4) {
             background: #FF671F; /* UT Martin Orange */
             color: #00205B; /* UT Martin Navy Blue */
-            margin: 0px;
+            margin: -20px;
             padding: 0px;
         }
 
@@ -191,7 +186,7 @@ ui <- navbarPage(
 
         section h1 {
             font-size: 3rem;
-            margin: 0px;
+            margin: -20px;
             padding: 0px;
         }
 
@@ -258,7 +253,7 @@ ui <- navbarPage(
 
         .reveal {
             position: relative;
-            transform: translateY(150px);
+            transform: translateY(100px);
             opacity: 0;
             transition: 1s all ease;
         }
@@ -294,7 +289,7 @@ ui <- navbarPage(
              ),
              tags$section(
                class = "reveal",
-               tags$h2("Step 1: Sunlight to Solar Panels"),
+               tags$h2("Step 1: Sunlight to Solar Panels", style = "margin-right: 20px;"),
                tags$div(
                  class = "text-container",
                  tags$div(
@@ -311,7 +306,7 @@ ui <- navbarPage(
              ),
              tags$section(
                class = "reveal",
-               tags$h2("Step 2: Photovoltaic Cells"),
+               tags$h2("Step 2: Photovoltaic Cells", style = "margin-right: 20px;"),
                tags$div(
                  class = "text-container",
                  tags$div(
@@ -328,7 +323,7 @@ ui <- navbarPage(
              ),
              tags$section(
                class = "reveal",
-               tags$h2("Step 3: Inverter Transformation"),
+               tags$h2("Step 3: Inverter Transformation", style = "margin-right: 20px;"),
                tags$div(
                  class = "text-container",
                  tags$div(
@@ -345,7 +340,7 @@ ui <- navbarPage(
              ),
              tags$section(
                class = "reveal",
-               tags$h2("Step 4: Power for You"),
+               tags$h2("Step 4: Power for You", style = "margin-right: 20px;"),
                tags$div(
                  class = "text-container",
                  tags$div(
@@ -426,7 +421,7 @@ ui <- navbarPage(
 
             h2 {
                 font-size: 24px;
-                margin-bottom: 10px;
+                margin-bottom: 0px;
             }
 
             ul {
@@ -1088,9 +1083,9 @@ server <- function(input, output, session) {
     monthly_sum <- total_production()$monthly
     
     HTML(paste(
-      "The West Tennessee Solar Farm has powered", floor(daily_sum / 30), "houses today.",
-      "The West Tennessee Solar Farm has powered", floor(weekly_sum / 30), "houses in the past 7 days.",
-      "The West Tennessee Solar Farm has powered", floor((weekly_sum * 4) / 30), "houses in the past 31 days."
+      "The West Tennessee Solar Farm has powered", floor(daily_sum / 30), "houses or ", floor(daily_sum / 11.81), " electric cars today.",
+      "The West Tennessee Solar Farm has powered", floor(weekly_sum / 30), "houses or ", floor(weekly_sum / 11.81), " electric cars in the past 7 days.",
+      "The West Tennessee Solar Farm has powered", floor((weekly_sum * 4) / 30), "houses or ", floor((weekly_sum * 4) / 11.81), " electric cars in the past 31 days."
     ))
   })
   #When closing out of the browser, the app automatically stops
