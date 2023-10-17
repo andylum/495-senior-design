@@ -719,7 +719,7 @@ server <- function(input, output, session) {
         )
         # Changes y scale
         p <- p + scale_y_continuous(
-          limits = c(0, 600),
+          limits = c(0, 1000),
           breaks = seq(0, 1000, by = 100)
         )
         #Converts ggplot to plotly for better interactivity
@@ -750,7 +750,7 @@ server <- function(input, output, session) {
       
       # Changes y scale
       p <- p + scale_y_continuous(
-        limits = c(0, 600),
+        limits = c(0, 1000),
         breaks = seq(0, 1000, by = 100)
       )
       #Converts ggplot to plotly for interactivity
@@ -825,7 +825,7 @@ server <- function(input, output, session) {
             )
           # Changes y scale
           p <- p + scale_y_continuous(
-            limits = c(0, 600),
+            limits = c(0, 1000),
             breaks = seq(0, 1000, by = 100)
           )
           #Converts ggplot to plotly for interactivity
@@ -858,7 +858,7 @@ server <- function(input, output, session) {
           )
           # Changes y scale
           p <- p + scale_y_continuous(
-            limits = c(0, 600),
+            limits = c(0, 1000),
             breaks = seq(0, 1000, by = 100)
           )
           #Converts ggplot to plotly for interactivity
@@ -883,7 +883,7 @@ server <- function(input, output, session) {
             limits = c(0, 1440)
           )# Changes y scale
           p <- p + scale_y_continuous(
-            limits = c(0, 600),
+            limits = c(0, 1000),
             breaks = seq(0, 1000, by = 100)
           )
           #Converts ggplot to plotly for interactivity
@@ -918,7 +918,7 @@ server <- function(input, output, session) {
           ) +
           # Changes y scale
           p <- p + scale_y_continuous(
-            limits = c(0, 600),
+            limits = c(0, 1000),
             breaks = seq(0, 1000, by = 100)
           )
           #Converts ggplot to plotly for interactivity
@@ -951,7 +951,7 @@ server <- function(input, output, session) {
         )
         # Changes y scale
         p <- p + scale_y_continuous(
-          limits = c(0, 600),
+          limits = c(0, 1000),
           breaks = seq(0, 1000, by = 100)
         )
         #Converts ggplot to plotly for interactivity
@@ -977,7 +977,7 @@ server <- function(input, output, session) {
         )
         # Changes y scale
         p <- p + scale_y_continuous(
-          limits = c(0, 600),
+          limits = c(0, 1000),
           breaks = seq(0, 1000, by = 100)
         )
         #Converts ggplot to plotly for interactivity
