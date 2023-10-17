@@ -703,7 +703,7 @@ server <- function(input, output, session) {
       #Tests to see if column data is available
       if (column_name %in% colnames(data)) {
         #Sets data to only the clicked sensor on the most recent day
-        sensorData <- data[data$DOY == recent_doy, column_name]
+        sensorData <- data[!is.na(data[[column_name]]), ]
         #Creates plot based on sensorData
         p <- ggplot(data = data[data$DOY == recent_doy, ],
                     aes(x = MINUTE, y = .data[[column_name]])) +
@@ -717,11 +717,6 @@ server <- function(input, output, session) {
           labels = seq(0, 24, by = 1),
           limits = c(0, 1440)
         )
-        #Changes y scale
-        p <- p + scale_y_continuous(
-          limits = c(-10, max(sensorData, 550)),
-          breaks = seq(0, max(sensorData, 550), by = 100)
-        )
         #Converts ggplot to plotly for better interactivity
         p <- ggplotly(p)
         #Disables zoom and drag features
@@ -732,7 +727,8 @@ server <- function(input, output, session) {
       #If no marker has been clicked, do this default behavior
     } else {
       #Sets data to most recent day for sensor 1
-      sensorData <- data[data$DOY == recent_doy, "Sensor.1"]
+      #sensorData <- data[data$DOY == recent_doy, "Sensor.1"]
+      sensorData <- data[!is.na(data[["Sensor.1"]]), ]
       #Creates plot
       p <- ggplot(data = data[data$DOY == recent_doy, ], 
                   aes(x = MINUTE, y = Sensor.1)) +
@@ -740,16 +736,16 @@ server <- function(input, output, session) {
         labs(x = "Time (Hours)",
              y = "Sensor 1 Irradiance (W/m²)",
              title = "Sensor 1 Plot")
-      #Changes x scale
+      # Changes x scale
       p <- p + scale_x_continuous(
         breaks = seq(0, 1440, by = 60),
         labels = seq(0, 24, by = 1),
         limits = c(0, 1440)
       )
-      #Changes y scale
+      
+      # Changes y scale
       p <- p + scale_y_continuous(
-        limits = c(-10, max(sensorData, 550)),
-        breaks = seq(0, max(sensorData, 550), by = 100)
+        breaks = seq(0, 1000, by = 100)
       )
       #Converts ggplot to plotly for interactivity
       p <- ggplotly(p)
@@ -806,6 +802,7 @@ server <- function(input, output, session) {
       if (column_name %in% colnames(data)) {
         # Filters data for the selected DOY and sensor
         filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
+        filtered_data <- filtered_data[!is.na(data[[column_name]]), ]
         if (nrow(filtered_data) == 0) {
           # Create a plot with a fixed y-axis scale from 0 to 550 and consistent x-axis limits and breaks
           p <- ggplot(data = NULL, aes(x = NULL, y = NULL)) +
@@ -819,9 +816,7 @@ server <- function(input, output, session) {
               breaks = seq(0, 1440, by = 60),
               labels = seq(0, 24, by = 1),
               limits = c(0, 1440)
-            ) +
-            #Changes y axis scale
-            scale_y_continuous(limits = c(0, 550), breaks = seq(0, 550, by = 100))
+            ) 
           #Converts ggplot to plotly for interactivity
           p <- ggplotly(p)
           #Disables zoom and drag
@@ -831,7 +826,7 @@ server <- function(input, output, session) {
         #Checks whether it is in a PowerProduction state
         if(PowerProduction()) {
           # Detrend the data
-          PowerProduction_sensor <- max(0, filtered_data[[column_name]] * 0.058 - 0.335)
+          PowerProduction_sensor <- -0.335 + filtered_data[[column_name]] * 0.058
           
           #Converts data to manipulable format
           p_data <- data.frame(MINUTE = filtered_data$MINUTE, PowerProductionValue = PowerProduction_sensor)
@@ -871,11 +866,6 @@ server <- function(input, output, session) {
             labels = seq(0, 24, by = 1),
             limits = c(0, 1440)
           )
-          #Changes y scale
-          p <- p + scale_y_continuous(
-            limits = c(-10, max(filtered_data[column_name], 550)),
-            breaks = seq(0, max(filtered_data[column_name], 550), by = 100)
-          )
           #Converts ggplot to plotly for interactivity
           p <- ggplotly(p)
           #Disables zoom and drag
@@ -889,10 +879,9 @@ server <- function(input, output, session) {
       marker_label <- "Sensor 1"
       column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
       
-      #Gets data for selected day for sensor 1
+      # Filters data for the selected DOY and sensor
       filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
-      
-      #Checks that there is data for a row
+      filtered_data <- filtered_data[!is.na(data[[column_name]]), ]
       if (nrow(filtered_data) == 0) {
         # Create a plot with a fixed y-axis scale from 0 to 550 and consistent x-axis limits and breaks
         p <- ggplot(data = NULL, aes(x = NULL, y = NULL)) +
@@ -901,52 +890,48 @@ server <- function(input, output, session) {
             x = "Time (Hours)",
             y = paste(marker_label, "Irradiance (W/m²)")
           ) +
-          #Changes x scale
+          #Changes x axis scale
           scale_x_continuous(
             breaks = seq(0, 1440, by = 60),
             labels = seq(0, 24, by = 1),
             limits = c(0, 1440)
           ) +
-          #Changes y scale
-          scale_y_continuous(limits = c(0, 550), breaks = seq(0, 550, by = 100))
+          #Converts ggplot to plotly for interactivity
+          p <- ggplotly(p)
+          #Disables zoom and drag
+          p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
+          return(p)
+      }
+      #Checks whether it is in a PowerProduction state
+      if(PowerProduction()) {
+        # Detrend the data
+        PowerProduction_sensor <- -0.335 + filtered_data[[column_name]] * 0.058
+        
+        #Converts data to manipulable format
+        p_data <- data.frame(MINUTE = filtered_data$MINUTE, PowerProductionValue = PowerProduction_sensor)
+        
+        # Create the plot with MINUTE on the X-axis and PowerProduction sensor irradiance on the Y-axis
+        p <- ggplot(data = p_data, aes(x = MINUTE, y = PowerProductionValue)) +
+          geom_line() +
+          labs(
+            title = paste(marker_label, "Power Production", format(input$Date, "%m-%d-%Y")),
+            x = "Time (Hours)",
+            y = paste(marker_label, "Power Production (W)")
+          )
+        #Changes x scale
+        p <- p + scale_x_continuous(
+          breaks = seq(0, 1440, by = 60),
+          labels = seq(0, 24, by = 1),
+          limits = c(0, 1440)
+        )
         #Converts ggplot to plotly for interactivity
         p <- ggplotly(p)
         #Disables zoom and drag
         p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
         return(p)
-      }
-      
-      if (PowerProduction()) {
-        if (PowerProduction()) {
-          # Detrend the data
-          PowerProduction_sensor <- filtered_data[, column_name] * 0.20
-          
-          #Converts to manipulable data
-          p_data <- data.frame(MINUTE = filtered_data$MINUTE, PowerProductionValue = PowerProduction_sensor)
-          
-          # Create the plot with MINUTE on the X-axis and PowerProduction sensor irradiance on the Y-axis
-          p <- ggplot(data = p_data, aes(x = MINUTE, y = PowerProductionValue)) +
-            geom_line() +
-            labs(
-              title = paste(marker_label, "Power Production", format(input$Date, "%m-%d-%Y")),
-              x = "Time (Hours)",
-              y = paste(marker_label, "Power Production (W)")
-            )
-          #Changes x scale
-          p <- p + scale_x_continuous(
-            breaks = seq(0, 1440, by = 60),
-            labels = seq(0, 24, by = 1),
-            limits = c(0, 1440)
-          )
-          #Converts ggplot to plotly for interactivity
-          p <- ggplotly(p)
-          p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
-          return(p)
-        }
-        #If button is not in PowerProduction state
+        #If not in PowerProduction state, plot regular data
       } else {
-        # Use trended data (no detrending)
-        # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
+        #Creates plot
         p <- ggplot(data = filtered_data, aes(x = MINUTE, y = .data[[column_name]])) +
           geom_line() +
           labs(
@@ -959,11 +944,6 @@ server <- function(input, output, session) {
           breaks = seq(0, 1440, by = 60),
           labels = seq(0, 24, by = 1),
           limits = c(0, 1440)
-        )
-        #Changes y scale
-        p <- p + scale_y_continuous(
-          limits = c(-10, max(filtered_data[column_name], 550)),
-          breaks = seq(0, max(filtered_data[column_name], 550), by = 100)
         )
         #Converts ggplot to plotly for interactivity
         p <- ggplotly(p)
