@@ -858,7 +858,7 @@ server <- function(input, output, session) {
           )
           # Changes y scale
           p <- p + scale_y_continuous(
-            limits = c(0, 75),
+            limits = c(-1, 75),
             breaks = seq(0, 75, by = 10)
           )
           #Converts ggplot to plotly for interactivity
@@ -901,7 +901,7 @@ server <- function(input, output, session) {
       
       # Filters data for the selected DOY and sensor
       filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
-      filtered_data <- filtered_data[!is.na(data[[column_name]]), ]
+      filtered_data <- filtered_data[!is.na(filtered_data), c("MINUTE", column_name)]
       if (nrow(filtered_data) == 0) {
         # Create a plot with a fixed y-axis scale from 0 to 550 and consistent x-axis limits and breaks
         p <- ggplot(data = NULL, aes(x = NULL, y = NULL)) +
@@ -918,7 +918,7 @@ server <- function(input, output, session) {
           ) +
           # Changes y scale
           p <- p + scale_y_continuous(
-            limits = c(0, 1000),
+            limits = c(-1, 1000),
             breaks = seq(0, 1000, by = 100)
           )
           #Converts ggplot to plotly for interactivity
@@ -951,7 +951,7 @@ server <- function(input, output, session) {
         )
         # Changes y scale
         p <- p + scale_y_continuous(
-          limits = c(0, 75),
+          limits = c(-1, 75),
           breaks = seq(0, 75, by = 10)
         )
         #Converts ggplot to plotly for interactivity
