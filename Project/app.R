@@ -858,8 +858,8 @@ server <- function(input, output, session) {
           )
           # Changes y scale
           p <- p + scale_y_continuous(
-            limits = c(0, 1000),
-            breaks = seq(0, 1000, by = 100)
+            limits = c(0, 75),
+            breaks = seq(0, 75, by = 10)
           )
           #Converts ggplot to plotly for interactivity
           p <- ggplotly(p)
@@ -929,7 +929,7 @@ server <- function(input, output, session) {
       }
       #Checks whether it is in a PowerProduction state
       if(PowerProduction()) {
-        # Detrend the data
+        # Determining power production the data
         PowerProduction_sensor <- -0.335 + filtered_data[[column_name]] * 0.058
         
         #Converts data to manipulable format
@@ -951,8 +951,8 @@ server <- function(input, output, session) {
         )
         # Changes y scale
         p <- p + scale_y_continuous(
-          limits = c(0, 1000),
-          breaks = seq(0, 1000, by = 100)
+          limits = c(0, 75),
+          breaks = seq(0, 75, by = 10)
         )
         #Converts ggplot to plotly for interactivity
         p <- ggplotly(p)
