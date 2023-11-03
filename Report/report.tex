@@ -18,7 +18,7 @@
 % ISBN
 % \isbn{978-1-4503-6708-0/20/04}
 %Conference
-\conferenceinfo{CHI'20,}{April  25--30, 2020, Honolulu, HI, USA}
+\conferenceinfo{ACM'23,}{November  16--17, 2023, Gatlinburg, TN, USA}
 %Price
 
 % Use this command to override the default ACM copyright statement
@@ -156,362 +156,153 @@ Our dashboard incorporates an export function, enabling users to extract data. I
 
 \section{Introduction}
 
-In the pursuit of sustainable energy solutions, our project ventures to unlock the vast potential of solar irradiance data. Our focus is on the West Tennessee Solar Farm, situated near Stanton, TN. Its strategic proximity to Blue Oval City adds notable importance. The critical challenge we address is the current, non-functional existing dashboard for the solar farm, which has left vital solar irradiance data inaccessible for potential users. The West Tennessee Solar Farm offers the potential for abundant clean energy, but its potential remains unrealized in part due to the limitations of the existing dashboard. In this project, we aspire to bridge this data accessibility gap while opening up opportunities to inform and educate the general public about the farm's renewable energy potential.
-
+In the pursuit of sustainable energy solutions, our project ventures to unlock the vast potential of solar irradiance data. Our focus is on the West Tennessee Solar Farm, situated near Stanton, TN \cite{WTSF}. Its strategic proximity to Blue Oval City adds notable importance. The critical challenge we address is the current, non-functional existing dashboard for the solar farm, which has left vital solar irradiance data inaccessible for potential users. The West Tennessee Solar Farm offers the potential for abundant clean energy, but its potential remains unrealized in part due to the limitations of the existing dashboard. In this project, we aspire to bridge this data accessibility gap while opening up opportunities to inform and educate the general public about the farm's renewable energy potential.
 
 In response to this need, our project emerges as a symbol of innovation and accessibility, seamlessly integrating an array of cutting-edge technologies. With MySQL as our data hub, we thoroughly organize solar energy data by sensor location. Python, in collaboration with the Google Drive API, takes on the role of capturing and decoding real-time data with unwavering precision. However, the importance of our project lies in R-Shiny dashboard, an interactive interface that goes beyond the typical data visualization. It not only brings solar irradiance data to life in real-time but also empowers users with interactive maps, intricate sensor insights, information that is relatable to the lay-person, and a comprehensive historical archive.
 
+\section{Motivation}
+
+The West Tennessee Solar Farm, located near Stanton, TN, represents a beacon of hope in the quest for clean and sustainable energy production. Nevertheless, despite its significant potential, the realization of this promise has remained elusive due to the operational constraints of the existing dashboard. Unfortunately, the dashboard has remained non-functional, thereby preventing users from accessing vital solar irradiance data. As a result, the solar farm's ability to significantly contribute to the renewable energy sector has been hampered.
+
+This challenge serves as the stimulus for our proactive engagement with this project. Our project was further motivated by the valuable input we received from the CEO and President of the West Tennessee Solar Farm during a conference with Dr. Sims. When we presented our initial dashboard, they were highly impressed with the concept and functionality. Their constructive feedback propelled us to further refine and develop the final dashboard product that we proudly offer today.
+
+Our interactive dashboard not only addresses the immediate needs of the solar farm but also extends its utility to education and research purposes. With this tool, we enable students, researchers, and the general public to gain insightful access to real-time solar irradiance data. This not only empowers them to better understand and appreciate the significance of renewable energy but also fosters a collaborative environment where valuable insights can be shared and applied. Whether for educational institutions or research facilities, our interactive dashboard serves as an invaluable resource for learning, innovation, and informed decision-making in the pursuit of sustainable energy solutions.
+
 
 \section{Technologies Used}
-The integrated project described is designed to collect, manage, and visualize real-time sensor data from a solar farm. MySQL is used to store and manage the sensor data, which includes various parameters such as solar irradiance levels from ten different sensors. This data is then retrieved by a Python program, which periodically updates a CSV file stored in Google Drive. This CSV file acts as a remote server, securing the data and making it accessible to both Python and R for analysis and visualization. The R-Shiny web application serves as the core of the project, offering a user-friendly and responsive dashboard for real-time data visualization. It includes interactive maps with clickable sensor markers, providing detailed information and enabling users to explore daily, weekly, and monthly trends in solar irradiance. The dashboard also facilitates historical data analysis and export options while being hosted on shinyapps.io for universal accessibility. The Google Cloud Console stores API information for data security, ensuring the integrity and privacy of the sensor data throughout the entire system. 
 
-\section{Typeset Text}
-The styles contained in this document have been modified from the
-default styles to reflect ACM formatting conventions. For example,
-content paragraphs like this one are formatted using the Normal style.
-
-\LaTeX\ sometimes will create overfull lines that extend into columns.
-To attempt to combat this, the \texttt{.cls} file has a command,
-\texttt{{\textbackslash}sloppy}, that essentially asks \LaTeX\ to
-prefer underfull lines with extra whitespace.  For more details on
-this, and info on how to control it more finely, check out
-{\url{http://www.economics.utoronto.ca/osborne/latex/PMAKEUP.HTM}}.
-
-\subsection{Title and Authors}
-
-Your paper's title, authors and affiliations should run across the
-full width of the page in a single column 17.8 cm (7 in.) wide.  The
-title should be in Helvetica or Arial 18-point bold.  Authors' names
-should be in Times New Roman or Times Roman 12-point bold, and
-affiliations in 12-point regular.  
-
-See \texttt{{\textbackslash}author} section of this template for
-instructions on how to format the authors. For more than three
-authors, you may have to place some address information in a footnote,
-or in a named section at the end of your paper. Names may optionally
-be placed in a single centered row instead of at the top of each
-column. Leave one 10-point line of white space below the last line of
-affiliations.
-
-\subsection{Abstract and Keywords}
-
-Every submission should begin with an abstract of about 150 words,
-followed by a set of Author Keywords and ACM Classification
-Keywords. The abstract and keywords should be placed in the left
-column of the first page under the left half of the title. The
-abstract should be a concise statement of the problem, approach, and
-conclusions of the work described. It should clearly state the paper's
-contribution to the field of HCI\@.
-
-\subsection{Normal or Body Text}
-
-Please use a 10-point Times New Roman or Times Roman font or, if this
-is unavailable, another proportional font with serifs, as close as
-possible in appearance to Times Roman 10-point. Other than Helvetica
-or Arial headings, please use sans-serif or non-proportional fonts
-only for special purposes, such as source code text.
-
-\subsection{First Page Copyright Notice}
-This template include a sample ACM copyright notice at the bottom of
-page 1, column 1.  Upon acceptance, you will be provided with the
-appropriate copyright statement and unique DOI string for publication.
-Accepted papers will be distributed in the conference
-publications. They will also be placed in the ACM Digital Library,
-where they will remain accessible to thousands of researchers and
-practitioners worldwide. See
-\url{http://acm.org/publications/policies/copyright_policy} for the
-ACM's copyright and permissions policy.
-
-\subsection{Subsequent Pages}
-
-On pages beyond the first, start at the top of the page and continue
-in double-column format.  The two columns on the last page should be
-of equal length.
-
-%% \begin{figure}
-%% \centering
-%%   \includegraphics[width=0.9\columnwidth]{figures/sigchi-logo}
-%%   \caption{Insert a caption below each figure. Do not alter the
-%%     Caption style.  One-line captions should be centered; multi-line
-%%     should be justified. }~\label{fig:figure1}
-%% \end{figure}
-
-\subsection{References and Citations}
-
-Use a numbered list of references at the end of the article, ordered
-alphabetically by last name of first author, and referenced by numbers
-in
-brackets.
-Your references should be published materials accessible to the
-public. Internal technical reports may be cited only if they are
-easily accessible (i.e., you provide the address for obtaining the
-report within your citation) and may be obtained by any reader for a
-nominal fee. Proprietary information may not be cited. Private
-communications should be acknowledged in the main text, not referenced
-(e.g., ``[Borriello, personal communication]'').
-
-References should be in ACM citation format:
-\url{http://acm.org/publications/submissions/latex_style}. This
-includes citations to internet
-resources
-according to ACM format, although it is often appropriate to include
-URLs directly in the text, as above.
-
-
-% Use a numbered list of references at the end of the article, ordered
-% alphabetically by first author, and referenced by numbers in
-% brackets~\cite{ethics, Klemmer:2002:WSC:503376.503378,
-%   Mather:2000:MUT, Zellweger:2001:FAO:504216.504224}. For papers from
-% conference proceedings, include the title of the paper and an
-% abbreviated name of the conference (e.g., for Interact 2003
-% proceedings, use \textit{Proc. Interact 2003}). Do not include the
-% location of the conference or the exact date; do include the page
-% numbers if available. See the examples of citations at the end of this
-% document. Within this template file, use the \texttt{References} style
-% for the text of your citation.
-
-% Your references should be published materials accessible to the
-% public.  Internal technical reports may be cited only if they are
-% easily accessible (i.e., you provide the address for obtaining the
-% report within your citation) and may be obtained by any reader for a
-% nominal fee.  Proprietary information may not be cited. Private
-% communications should be acknowledged in the main text, not referenced
-% (e.g., ``[Robertson, personal communication]'').
-
-\begin{table}
-  \centering
-  \begin{tabular}{l r r r}
-    % \toprule
-    & & \multicolumn{2}{c}{\small{\textbf{Test Conditions}}} \\
-    \cmidrule(r){3-4}
-    {\small\textit{Name}}
-    & {\small \textit{First}}
-      & {\small \textit{Second}}
-    & {\small \textit{Final}} \\
-    \midrule
-    Marsden & 223.0 & 44 & 432,321 \\
-    Nass & 22.2 & 16 & 234,333 \\
-    Borriello & 22.9 & 11 & 93,123 \\
-    Karat & 34.9 & 2200 & 103,322 \\
-    % \bottomrule
-  \end{tabular}
-  \caption{Table captions should be placed below the table. We
-    recommend table lines be 1 point, 25\% black. Minimize use of
-    table grid lines.}~\label{tab:table1}
-\end{table}
-
-\section{Sections}
-
-The heading of a section should be in Helvetica or Arial 9-point bold,
-all in capitals. Sections should \textit{not} be numbered.
-
-\subsection{Subsections}
-
-Headings of subsections should be in Helvetica or Arial 9-point bold
-with initial letters capitalized.  For sub-sections and
-sub-subsections, a word like \emph{the} or \emph{of} is not
-capitalized unless it is the first word of the heading.
-
-\subsubsection{Sub-subsections}
-
-Headings for sub-subsections should be in Helvetica or Arial 9-point
-italic with initial letters capitalized.  Standard
-\texttt{{\textbackslash}section}, \texttt{{\textbackslash}subsection},
-and \texttt{{\textbackslash}subsubsection} commands will work fine in
-this template.
-
-\section{Figures/Captions}
-
-Place figures and tables at the top or bottom of the appropriate
-column or columns, on the same page as the relevant text (see
-Figure~\ref{fig:figure1}). A figure or table may extend across both
-columns to a maximum width of 17.78 cm (7 in.).
-
-%% \begin{figure*}
-%%   \centering
-%%   \includegraphics[width=1.75\columnwidth]{figures/map}
-%%   \caption{In this image, the map maximizes use of space. You can make
-%%     figures as wide as you need, up to a maximum of the full width of
-%%     both columns. Note that \LaTeX\ tends to render large figures on a
-%%     dedicated page. Image: \ccbynd~ayman on
-%%     Flickr.}~\label{fig:figure2}
-%% \end{figure*}
-
-Captions should be Times New Roman or Times Roman 9-point bold.  They
-should be numbered (e.g., ``Table~\ref{tab:table1}'' or
-``Figure~\ref{fig:figure1}''), centered (if one line) otherwise justified, and placed beneath the figure
-or table.  Please note that the words ``Figure'' and ``Table'' should
-be spelled out (e.g., ``Figure'' rather than ``Fig.'') wherever they
-occur. Figures, like Figure~\ref{fig:figure2}, may span columns and
-all figures should also include alt text for improved accessibility.
-Papers and notes may use color figures, which are included in the page
-limit; the figures must be usable when printed in black-and-white in
-the proceedings.
-
-The paper may be accompanied by a short video figure (we recommend staying within five
-minutes in length). However, the paper should stand on its own without
-the video figure, as the video may not be available to everyone who
-reads the paper.  
-
-\subsection{Inserting Images}
-When possible, include a vector formatted graphic (i.e. PDF or EPS).
-When including bitmaps,  use an image editing tool to resize the image
-at the appropriate printing resolution (usually 300 dpi).
-
-\section{Quotations}
-Quotations may be italicized when \textit{``placed inline''}.
-
-\begin{quote}
-Longer quotes, when placed in their own paragraph, need not be
-italicized or in quotation marks when indented.  
-\end{quote}
-
-\section{Language, Style, and Content}
-
-The written and spoken language of SIGCHI is English. Spelling and
-punctuation may use any dialect of English (e.g., British, Canadian,
-US, etc.) provided this is done consis- tently. Hyphenation is
-optional. To ensure suitability for an international audience, please
-pay attention to the following:
-
+\subsection{MySQL}
+The MySQL database was used to store information about irradiance collected from data sensors. The database schema included a main table called Irradiance that contained the following information:
 \begin{itemize}
-\item Write in a straightforward style.
-\item Try to avoid long or complex sentence structures.
-\item Use common and basic vocabulary (e.g., use the word ``unusual'' rather than the word ``arcane''.
-\item Briefly define or explain all technical terms that may be
-  unfamiliar to readers.
-\item Explain all acronyms the first time they are used in your
-  text---e.g., ``Digital Signal Processing (DSP)''.
-\item Explain local references (e.g., not everyone knows all city
-  names in a particular country).
-\item Explain ``insider'' comments. Ensure that your whole audience
-  understands any reference whose meaning you do not describe (e.g.,
-  do not assume that everyone has used a Macintosh or a particular
-  application).
-\item Explain colloquial language and puns. Understanding phrases like
-  ``red herring'' may require a local knowledge of English.  Humor and
-  irony are difficult to translate.
-\item Use unambiguous forms for culturally localized concepts, such as
-  times, dates, currencies, and numbers (e.g., ``1--5--97'' or
-  ``5/1/97'' may mean 5 January or 1 May, and ``seven o'clock'' may
-  mean 7:00 am or 19:00). For currencies, indicate equivalences:
-  ``Participants were paid {\fontfamily{txr}\selectfont \textwon}
-  25,000, or roughly US \$22.''
-\item Be careful with the use of gender-specific pronouns (he, she)
-  and other gendered words (chairman, manpower, man-months). Use
-  inclusive language that is gender-neutral (e.g., she or he, they,
-  s/he, chair, staff, staff-hours, person-years). See the
-  \textit{Guidelines for Bias-Free Writing} for further advice and
-  examples regarding gender and other personal
-  attributes~. Be particularly aware of
-  considerations around writing about people with disabilities.
-\item If possible, use the full (extended) alphabetic character set
-  for names of persons, institutions, and places (e.g.,
-  Gr{\o}nb{\ae}k, Lafreni\'ere, S\'anchez, Nguy{\~{\^{e}}}n,
-  Universit{\"a}t, Wei{\ss}enbach, Z{\"u}llighoven, \r{A}rhus, etc.).
-  These characters are already included in most versions and variants
-  of Times, Helvetica, and Arial fonts.
+\item[1.] The day of year the data was recorded in, ranging from 1 - 365 representing each day of the year.
+\item[2.] The minute of the day that the data was recorded in, ranging from 1 - 1440 representing each minute of the day.
+\item[3.] 10 separate columns containing the collected irradiance from each sensor in watts per meter squared ($\dfrac{W}{m^2}$). 
+\item[4.] The total irradiance of all sensors.
 \end{itemize}
 
-\section{Accessibility}
-The Executive Council of SIGCHI has committed to making SIGCHI
-conferences more inclusive for researchers, practitioners, and
-educators with disabilities. As a part of this goal, the all authors
-are asked to work on improving the accessibility of their
-submissions. Specifically, we encourage authors to carry out the
-following five steps:
-\begin{enumerate}
-\item Add alternative text to all figures
-\item Mark table headings
-\item Add tags to the PDF
-\item Verify the default language
-\item Set the tab order to ``Use Document Structure''
-\end{enumerate}
-For more information and links to instructions and resources, please
-see: \url{http://chi2016.acm.org/accessibility}.  The
-\texttt{{\textbackslash}hyperref} package allows you to create well tagged PDF files,
-please see the preamble of this template for an example.
+\subsection{Python}
+The python program uses the mysql library\cite{MySQL} to connect to the database and retrieve data from the database. It gets the information at a rate of 1 minute, providing real time updates to the R-Shiny dashboard. It does this by creating a query that is then executed on the database.
 
-\section{Page Numbering, Headers and Footers}
-Your final submission should not contain footer or header information
-at the top or bottom of each page. Specifically, your final submission
-should not include page numbers. Initial submissions may include page
-numbers, but these must be removed for camera-ready. Page numbers will
-be added to the PDF when the proceedings are assembled.
+\subsection{R-Shiny}
+Through multiple packages, R-Shiny is used to perform statistical analyses and to plot both power production and irradiance. It also holds the code for the user interface and performs the conversion between irradiance and power production. 
 
-\section{Producing and Testing PDF Files}
+\subsection{ShinyApps.io} 
+ShinyApps.io is used to host the dashboard as a website on the cloud. It gives access to the dashboard for the public. This is essential since one of the main goals of the project is to make it an educational tool as well as a research tool. It uses the Posit Cloud, which is the main cloud server for R-Shiny programs.
 
-We recommend that you produce a PDF version of your submission well
-before the final deadline.  Your PDF file must be ACM DL
-Compliant. The requirements for an ACM Compliant PDF are available at:
-{\url{http://www.scomminc.com/pp/acmsig/ACM-DL-pdfs-requirements.htm}}.
+\subsection{Google Cloud Console}
+Google Cloud Console is used to secure the data being transferred to the website. It protects it by masking passwords and API keys to the database and the APIs being used.
 
-Test your PDF file by viewing or printing it with the same software we
-will use when we receive it, Adobe Acrobat Reader Version 10. This is
-widely available at no cost. Note that most
-reviewers will use a North American/European version of Acrobat
-reader, so please check your PDF accordingly.
+\section{R Packages}
+R packages play a pivotal role in bringing the solar farm data dashboard to life. R packages are collections of functions, documentation, and sample data bundled together for specific tasks or purposes. In the project, several key R packages have been harnessed to create a robust and interactive dashboard, catering to the real-time needs of the solar farm data:
+
+\subsection{Shiny}
+
+Shiny is an R package used to bridge the gap between R and HTML. It was used to design the UI of the dashboard as well as connecting the data collected from the MySQL database to the R program. Finally, it allowed reactivity in the R program, making real time data visualization possible.\cite{R-Shiny}\cite{Wickham_2021}
+
+\subsection{Leaflet}
+
+Leaflet is used to provide the map and all of its functionalities. It uses the satellite photos from the USGS (United States Geological Survey) for the interactive picture of the solar farm. Leaflet also contributed to the popups and zoom features of the map, allowing the user to have easy access to information from each sensor.\cite{Leaflet}
+
+\subsection{OpenMeteo}
+
+OpenMeteo is an API used for weather forecasting and historical data analysis. It allowed for forecasting the next day on the dashboard. It provided the hourly cloud cover, hourly temperature, weather code, and the amount of shortwave UV radiation. The hourly variables were averaged for user convenience.\cite{OpenMeteo}
+
+\subsection{Google Drive}
+The google drive package allows the program to connect to google drive files. It is used to connect to the csv file that contains all the processed data for the dashboard plots and sensor information.\cite{GD}
+
+\subsection{Rsconnect}
+The rsconnect package connects the R-shiny application to shinyapps.io server. \cite{RSConnect}
+
+\subsection{GGPlot2 and Plotly}
+GGPlot2 and Plotly allows for the interactivity in the plots. It allows the user to hover over the plot and see the minute the data was gathered and the irradiance at that time. It also allows null data to be absent from the dataset. 
+
+\section{Initial Mockup}
+\includegraphics[scale = 0.3]{Initial Mockup.pdf}
+\label{fig:initial-mockup}
+
+
+\subsection{Initial Features}
+The initial features of the first mockup includes:
+\begin{itemize}
+    \item A title for the webpage
+    \item A map with sensor markers and Popups that display the current irradiance
+    \item An irradiance plot that shows data in a selected time frame reactively
+    \item A power production plot that takes the irradiance and converts it into power production reactively.
+    \item A data export button that allows the user to download data for a specified time frame
+    \item A date selector that allows the user to specify the time of the data shown
+    \item A button that allows the user to switch between plotting daily, weekly, and monthly data plots.
+\end{itemize}
+
+\section{Finalized Dashboard Features}
+Throughout the design process many features have either been added or removed.
+\subsection{Finalized Dashboard}
+\includegraphics[scale = 0.18]{Thumbnail.png}
+\subsection{Reactive Plots}
+The dashboard's main feature is the reactive plots that show the current irradiance level or power production. The plots are able to change from live plot to daily plots. Also within the daily plots, the plots can switch between irradiance and power production. It does this using a formula gathered through scientific study.\cite{PowerConversion}
+
+\subsection{Interactive Map}
+The map that shows the West Tennessee Solar Farm\cite{WTSF} from an ariel view. It has clickable sensors that pop-up with the current irradiance value at that time. The sensors change colors when one is abnormally low or abnormally high. It is colored based on a red to green gradient.\ref{fig:initial-mockup} The map also has the capability to zoom in and out. All of the interactivity and reactivity within the map was made using the Leaflet package.\cite{Leaflet}
+
+\subsection{Weather Forecast Table}
+The dashboard has a weather forecast for the next day. It gives the cloud cover, temperature, weather code, and total predicted shortwave ultraviolet radiation. This allows not only users to know the predicted forecast, it also allows the West Tennessee Solar Farm to plan storage based on how much power the farm will have to supplement the main power supply.
+
+\subsection{Exporting Daily Data}
+The dashboard has a button to download the specific days data the user is looking at as a csv. This is achieved using the downloadHandler in Shiny.\cite{R-Shiny} Pressing the button will pop up with a "Save As" screen on the users local computer. By default it will name the file in the format, mm-dd-yyyy.csv, where the date is the current days plot the user is looking at.
+
+\subsection{Educational Features}
+The dashboard has two educational sections. The first section is a description of what irradiance is. The second section contains reactive text that converts the total power production to more relatable units: amount of houses powered and how many electric cars are being powered. This calculated for the day, week, and month.
+
+\section{Other Features}
+Along with the dashboard there are two other tabs.
+\subsection{Solar Power Process}
+The tab explains in a simple format how the solar panels collect sunlight and convert it to power. It uses the fade in CSS animation to keep users engaged. It is meant to serve as an education and research tool for the public outreach and awareness.
+\subsection{Frequently Asked Questions}
+The tab answers Frequently Asked Questions about solar farms and the solar power process. 
+
+\section{Power Conversion Formula}
+The dashboard has the functionality for the data to be converted from irradiance in $\dfrac{W}{m^2}$ to total power production in $kWh$. Due to certain factors, such as the angle of the rays, the angle of the panel, the amount of interference and a particular solar's farm efficiency factor, the irradiance to power production conversion is fascinating formula. Through a study in the \emph{Renewable and Sustainable Energy Reviews} in 2022\cite{PowerConversion}, found that taking into all of these factors, and simplifying it down to a reasonable level the formula was as follows: Power Production $\approx -0.038 + 0.0058 * Current Irradiance$. For lower values this would result in a measure less than 0. We com batted this by using the following R code: max(0, -0.038 + 0.0058 * Current Irradiance). This data assumes that the angle of the solar panel, the angle of the UV rays, and the solar farm efficiency factor has been taken into account. 
+
+% ``Quotation Example''
+
+%\section{Accessibility}
+%The Executive Council of SIGCHI has committed to making SIGCHI
+%conferences more inclusive for researchers, practitioners, and
+%educators with disabilities. As a part of this goal, the all authors
+%are asked to work on improving the accessibility of their
+%submissions. Specifically, we encourage authors to carry out the
+%following five steps:
+%\begin{enumerate}
+%\item Add alternative text to all figures
+%\item Mark table headings
+%\item Add tags to the PDF
+%\item Verify the default language
+%\item Set the tab order to ``Use Document Structure''
+%\end{enumerate}
+%For more information and links to instructions and resources, please
+%see: \url{http://chi2016.acm.org/accessibility}.  The
+%\texttt{{\textbackslash}hyperref} package allows you to create well tagged PDF files,
+%please see the preamble of this template for an example.
+
 
 \section{Conclusion}
 
-It is important that you write for the SIGCHI audience. Please read
-previous years' proceedings to understand the writing style and
-conventions that successful authors have used. It is particularly
-important that you state clearly what you have done, not merely what
-you plan to do, and explain how your work is different from previously
-published work, i.e., the unique contribution that your work makes to
-the field. Please consider what the reader will learn from your
-submission, and how they will find your work useful. If you write with
-these questions in mind, your work is more likely to be successful,
-both in being accepted into the conference, and in influencing the
-work of our field.
+In conclusion, our project represents more than just a solution to an immediate challenge. It embodies a valuable educational resource, catering to individuals keen on delving into the intricacies of solar farm operations and the utilization of renewable energy sources. With our interactive dashboard, learners can gain a comprehensive understanding of the solar farm process, from real-time data access to interactive map exploration, and even insights tailored to the layperson. 
+
+Additionally, our work extends its reach to benefit researchers by providing them with unfettered access to public data essential for their research. This research-friendly feature allows academics and scientists to harness the potential of solar irradiance data, thereby contributing to the field's growth and development.
+
+By presenting our innovative and accessible solution, we've not just stated our intentions but have demonstrated a tangible contribution to the realm of renewable energy. Readers will discover a tool that bridges the gap between renewable energy potential and reality, making clean energy more accessible, understandable, and usable. Our project aims to be a valuable resource for those looking to learn and research in this area, offering a unique blend of functionality that brings the West Tennessee Solar Farm and its data to life for the benefit of education and research alike.
 
 \section{Acknowledgments}
 
-Sample text: We thank all the volunteers, and all publications support
-and staff, who wrote and provided helpful comments on previous
-versions of this document. Authors 1, 2, and 3 gratefully acknowledge
-the grant from NSF (\#1234--2012--ABC). \textit{This whole paragraph is
-  just an example.}
-
-% Balancing columns in a ref list is a bit of a pain because you
-% either use a hack like flushend or balance, or manually insert
-% a column break.  http://www.tex.ac.uk/cgi-bin/texfaq2html?label=balance
-% multicols doesn't work because we're already in two-column mode,
-% and flushend isn't awesome, so I choose balance.  See this
-% for more info: http://cs.brown.edu/system/software/latex/doc/balance.pdf
-%
-% Note that in a perfect world balance wants to be in the first
-% column of the last page.
-%
-% If balance doesn't work for you, you can remove that and
-% hard-code a column break into the bbl file right before you
-% submit:
-%
-% http://stackoverflow.com/questions/2149854/how-to-manually-equalize-columns-
-% in-an-ieee-paper-if-using-bibtex
-%
-% Or, just remove \balance and give up on balancing the last page.
-%
+We would like to thank all of our partners for helping us make this project possible. Thank you to:
+\begin{itemize}
+    \item Dr. Sims
+    \item West Tennessee Solar Farm
+    \item University of Tennessee Research Foundation
+    \item University of Tennessee at Martin Department of Computer Science and
+    \item University of Tennessee at Martin Department of Mathematics and Statistics
+\end{itemize}
 \balance{}
-
-\section{References Format}
-Your references should be published materials accessible to the
-public. Internal technical reports may be cited only if they are
-easily accessible and may be obtained by any reader for a nominal
-fee. Proprietary information may not be cited. Private communications
-should be acknowledged in the main text, not referenced (e.g.,
-[Golovchinsky, personal communication]). References must be the same
-font size as other body text. References should be in alphabetical
-order by last name of first author. Use a numbered list of references
-at the end of the article, ordered alphabetically by last name of
-first author, and referenced by numbers in brackets. For papers from
-conference proceedings, include the title of the paper and the name of
-the conference. Do not include the location of the conference or the
-exact date; do include the page numbers if available. 
-
-Citing something\cite{unrealweb}. Citing something else.\cite{smit54}
-
 
 % BALANCE COLUMNS
 \balance{}
