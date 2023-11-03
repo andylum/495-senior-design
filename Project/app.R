@@ -7,7 +7,6 @@ library(openmeteo)
 library(ggplot2)
 library(plotly)
 
-# Define UI for the Shiny app
 ui <- navbarPage(
   "Solar Farm Dashboard",
   tabPanel("Dashboard", 
@@ -29,6 +28,14 @@ ui <- navbarPage(
           align-items: center;
           margin-bottom: 20px;
           margin-top: -20px;
+        }
+        
+        .navbar .nav {
+          align-items: center;
+        }
+        .nav.navbar-nav > li > a {
+          align-items: center;
+          margin-top: 20px; /* Add padding to vertically center align the tab labels */
         }
         
       ")),
@@ -77,7 +84,7 @@ ui <- navbarPage(
                        ),
                      ),
                      div(
-                       style = "background-color: white; padding: 10px; border-radius: 15px; text-align: left; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin: 20px; display: flex; flex-direction: column; align-items: center;",
+                       style = "background-color: white; padding: 10px; border-radius: 15px; text-align: left; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin: 20px; height: auto; width: auto; align-items: center;",
                        uiOutput("total_production_text"),
                        img(
                          src = "front-page-illo-02-e1528216037613.png",
@@ -86,41 +93,8 @@ ui <- navbarPage(
                        )
                      )
                    ),
-<<<<<<< HEAD
                  ),
                ),
-               # Bubble text for both Power production and Irradiance
-               # div(
-               #   div(
-               #     style = "background-color: white; padding: 10px; border-radius: 15px; width: 100%; text-align: center; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin-top: 0px;",
-               #     HTML("<b>Irradiance</b> is a measure of how much energy from sunlight or other forms of light falls on a given area, typically expressed per square meter. It helps us understand how much light energy is reaching a specific spot, such as a solar panel.")
-               #   )
-=======
-                   # Bubble text for both Power production and Irradiance
-                   div(
-                     style = "display: flex; justify-content: space-between; align-items: flex-start; width: 100%;",
-                     div(
-                       style = "width: 35%;",
-                       div(
-                         style = "background-color: white; padding: 10px; border-radius: 15px; text-align: left; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black;",
-                         HTML("The West Tennessee Solar Farm generates enough energy to power 11 homes each week, 42 homes each month, and <b>500 homes each year</b>."),
-                         img(
-                           src = "front-page-illo-02-e1528216037613.png",
-                           height = "100px",
-                           width = "100%"
-                         )
-                       )
-                     ),
-                     div(
-                       style = "background-color: white; padding: 10px; border-radius: 15px; width: 63%; text-align: center; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8); color: black; margin-top: 30px;",
-                       HTML("<b>Irradiance</b> is a measure of how much energy from sunlight or other forms of light falls on a given area, typically expressed per square meter. It helps us understand how much light energy is reaching a specific spot, such as a solar panel.")
-                     )
-                   )
-    
-                 )
-               ),
-               # Bottom Border that includes UT System, UT Research Foundation, UTM Logo, and copyright message.
->>>>>>> 999739566ed91d3d2994876da05f3752915487a9
                div(
                  style = "background-color: #0b2341; color: #F5F7FA; text-align: center; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;",
                  div(
@@ -186,28 +160,29 @@ ui <- navbarPage(
         section:nth-child(1) {
             color: #FF671F; /* UT Martin Orange */
             background: #00205B;
-            margin: 0px;
+            margin: -20px;
             padding: 0px;
+            
         }
 
         section:nth-child(2) {
             background: #FF671F; /* UT Martin Orange */
             color: #00205B; /* UT Martin Navy Blue */
-            margin: 0px;
+            margin: -20px;
             padding: 0px;
         }
 
         section:nth-child(3) {
             color: #FF671F; /* UT Martin Orange */
             background: #00205B;
-            margin: 0px;
+            margin: -20px;
             padding: 0px;
         }
 
         section:nth-child(4) {
             background: #FF671F; /* UT Martin Orange */
             color: #00205B; /* UT Martin Navy Blue */
-            margin: 0px;
+            margin: -20px;
             padding: 0px;
         }
 
@@ -218,7 +193,7 @@ ui <- navbarPage(
 
         section h1 {
             font-size: 3rem;
-            margin: 0px;
+            margin: -20px;
             padding: 0px;
         }
 
@@ -285,7 +260,7 @@ ui <- navbarPage(
 
         .reveal {
             position: relative;
-            transform: translateY(150px);
+            transform: translateY(100px);
             opacity: 0;
             transition: 1s all ease;
         }
@@ -321,7 +296,7 @@ ui <- navbarPage(
              ),
              tags$section(
                class = "reveal",
-               tags$h2("Step 1: Sunlight to Solar Panels"),
+               tags$h2("Step 1: Sunlight to Solar Panels", style = "margin-right: 20px;"),
                tags$div(
                  class = "text-container",
                  tags$div(
@@ -338,7 +313,7 @@ ui <- navbarPage(
              ),
              tags$section(
                class = "reveal",
-               tags$h2("Step 2: Photovoltaic Cells"),
+               tags$h2("Step 2: Photovoltaic Cells", style = "margin-right: 20px;"),
                tags$div(
                  class = "text-container",
                  tags$div(
@@ -355,7 +330,7 @@ ui <- navbarPage(
              ),
              tags$section(
                class = "reveal",
-               tags$h2("Step 3: Inverter Transformation"),
+               tags$h2("Step 3: Inverter Transformation", style = "margin-right: 20px;"),
                tags$div(
                  class = "text-container",
                  tags$div(
@@ -372,7 +347,7 @@ ui <- navbarPage(
              ),
              tags$section(
                class = "reveal",
-               tags$h2("Step 4: Power for You"),
+               tags$h2("Step 4: Power for You", style = "margin-right: 20px;"),
                tags$div(
                  class = "text-container",
                  tags$div(
@@ -415,7 +390,7 @@ ui <- navbarPage(
                h5("This project is supported by the University of Tennessee Research Foundation, the Department of Computer Science, and the Department of Mathematics and Statistics at the University of Tennessee at Martin.", style = "font-weight: bold; font-size: 12px;")
              )
            )
-  ),
+           ),
   tabPanel(
     "FAQs",
     tags$head(
@@ -453,7 +428,7 @@ ui <- navbarPage(
 
             h2 {
                 font-size: 24px;
-                margin-bottom: 10px;
+                margin-bottom: 0px;
             }
 
             ul {
@@ -615,7 +590,7 @@ ui <- navbarPage(
         )
       )
     )
-  ),
+),
 )
 # Define server logic
 server <- function(input, output, session) {
@@ -728,7 +703,7 @@ server <- function(input, output, session) {
       #Tests to see if column data is available
       if (column_name %in% colnames(data)) {
         #Sets data to only the clicked sensor on the most recent day
-        sensorData <- data[data$DOY == recent_doy, column_name]
+        sensorData <- data[!is.na(data[[column_name]]), ]
         #Creates plot based on sensorData
         p <- ggplot(data = data[data$DOY == recent_doy, ],
                     aes(x = MINUTE, y = .data[[column_name]])) +
@@ -742,10 +717,10 @@ server <- function(input, output, session) {
           labels = seq(0, 24, by = 1),
           limits = c(0, 1440)
         )
-        #Changes y scale
+        # Changes y scale
         p <- p + scale_y_continuous(
-          limits = c(-10, max(sensorData, 550)),
-          breaks = seq(0, max(sensorData, 550), by = 100)
+          limits = c(0, 1000),
+          breaks = seq(0, 1000, by = 100)
         )
         #Converts ggplot to plotly for better interactivity
         p <- ggplotly(p)
@@ -757,7 +732,8 @@ server <- function(input, output, session) {
       #If no marker has been clicked, do this default behavior
     } else {
       #Sets data to most recent day for sensor 1
-      sensorData <- data[data$DOY == recent_doy, "Sensor.1"]
+      #sensorData <- data[data$DOY == recent_doy, "Sensor.1"]
+      sensorData <- data[!is.na(data[["Sensor.1"]]), ]
       #Creates plot
       p <- ggplot(data = data[data$DOY == recent_doy, ], 
                   aes(x = MINUTE, y = Sensor.1)) +
@@ -765,16 +741,17 @@ server <- function(input, output, session) {
         labs(x = "Time (Hours)",
              y = "Sensor 1 Irradiance (W/m²)",
              title = "Sensor 1 Plot")
-      #Changes x scale
+      # Changes x scale
       p <- p + scale_x_continuous(
         breaks = seq(0, 1440, by = 60),
         labels = seq(0, 24, by = 1),
         limits = c(0, 1440)
       )
-      #Changes y scale
+      
+      # Changes y scale
       p <- p + scale_y_continuous(
-        limits = c(-10, max(sensorData, 550)),
-        breaks = seq(0, max(sensorData, 550), by = 100)
+        limits = c(0, 1000),
+        breaks = seq(0, 1000, by = 100)
       )
       #Converts ggplot to plotly for interactivity
       p <- ggplotly(p)
@@ -831,6 +808,7 @@ server <- function(input, output, session) {
       if (column_name %in% colnames(data)) {
         # Filters data for the selected DOY and sensor
         filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
+        filtered_data <- filtered_data[!is.na(data[[column_name]]), ]
         if (nrow(filtered_data) == 0) {
           # Create a plot with a fixed y-axis scale from 0 to 550 and consistent x-axis limits and breaks
           p <- ggplot(data = NULL, aes(x = NULL, y = NULL)) +
@@ -844,9 +822,12 @@ server <- function(input, output, session) {
               breaks = seq(0, 1440, by = 60),
               labels = seq(0, 24, by = 1),
               limits = c(0, 1440)
-            ) +
-            #Changes y axis scale
-            scale_y_continuous(limits = c(0, 550), breaks = seq(0, 550, by = 100))
+            )
+          # Changes y scale
+          p <- p + scale_y_continuous(
+            limits = c(0, 1000),
+            breaks = seq(0, 1000, by = 100)
+          )
           #Converts ggplot to plotly for interactivity
           p <- ggplotly(p)
           #Disables zoom and drag
@@ -856,7 +837,7 @@ server <- function(input, output, session) {
         #Checks whether it is in a PowerProduction state
         if(PowerProduction()) {
           # Detrend the data
-          PowerProduction_sensor <- max(0, filtered_data[[column_name]] * 0.058 - 0.335)
+          PowerProduction_sensor <- -0.335 + filtered_data[[column_name]] * 0.058
           
           #Converts data to manipulable format
           p_data <- data.frame(MINUTE = filtered_data$MINUTE, PowerProductionValue = PowerProduction_sensor)
@@ -874,6 +855,11 @@ server <- function(input, output, session) {
             breaks = seq(0, 1440, by = 60),
             labels = seq(0, 24, by = 1),
             limits = c(0, 1440)
+          )
+          # Changes y scale
+          p <- p + scale_y_continuous(
+            limits = c(-1, 75),
+            breaks = seq(0, 75, by = 10)
           )
           #Converts ggplot to plotly for interactivity
           p <- ggplotly(p)
@@ -895,11 +881,10 @@ server <- function(input, output, session) {
             breaks = seq(0, 1440, by = 60),
             labels = seq(0, 24, by = 1),
             limits = c(0, 1440)
-          )
-          #Changes y scale
+          )# Changes y scale
           p <- p + scale_y_continuous(
-            limits = c(-10, max(filtered_data[column_name], 550)),
-            breaks = seq(0, max(filtered_data[column_name], 550), by = 100)
+            limits = c(0, 1000),
+            breaks = seq(0, 1000, by = 100)
           )
           #Converts ggplot to plotly for interactivity
           p <- ggplotly(p)
@@ -914,10 +899,9 @@ server <- function(input, output, session) {
       marker_label <- "Sensor 1"
       column_name <- paste0("Sensor.", gsub("Sensor ", "", marker_label))
       
-      #Gets data for selected day for sensor 1
+      # Filters data for the selected DOY and sensor
       filtered_data <- data[data$DOY == difference, c("MINUTE", column_name)]
-      
-      #Checks that there is data for a row
+      filtered_data <- filtered_data[!is.na(filtered_data), c("MINUTE", column_name)]
       if (nrow(filtered_data) == 0) {
         # Create a plot with a fixed y-axis scale from 0 to 550 and consistent x-axis limits and breaks
         p <- ggplot(data = NULL, aes(x = NULL, y = NULL)) +
@@ -926,52 +910,58 @@ server <- function(input, output, session) {
             x = "Time (Hours)",
             y = paste(marker_label, "Irradiance (W/m²)")
           ) +
-          #Changes x scale
+          #Changes x axis scale
           scale_x_continuous(
             breaks = seq(0, 1440, by = 60),
             labels = seq(0, 24, by = 1),
             limits = c(0, 1440)
           ) +
-          #Changes y scale
-          scale_y_continuous(limits = c(0, 550), breaks = seq(0, 550, by = 100))
+          # Changes y scale
+          p <- p + scale_y_continuous(
+            limits = c(-1, 1000),
+            breaks = seq(0, 1000, by = 100)
+          )
+          #Converts ggplot to plotly for interactivity
+          p <- ggplotly(p)
+          #Disables zoom and drag
+          p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
+          return(p)
+      }
+      #Checks whether it is in a PowerProduction state
+      if(PowerProduction()) {
+        # Determining power production the data
+        PowerProduction_sensor <- -0.335 + filtered_data[[column_name]] * 0.058
+        
+        #Converts data to manipulable format
+        p_data <- data.frame(MINUTE = filtered_data$MINUTE, PowerProductionValue = PowerProduction_sensor)
+        
+        # Create the plot with MINUTE on the X-axis and PowerProduction sensor irradiance on the Y-axis
+        p <- ggplot(data = p_data, aes(x = MINUTE, y = PowerProductionValue)) +
+          geom_line() +
+          labs(
+            title = paste(marker_label, "Power Production", format(input$Date, "%m-%d-%Y")),
+            x = "Time (Hours)",
+            y = paste(marker_label, "Power Production (W)")
+          )
+        #Changes x scale
+        p <- p + scale_x_continuous(
+          breaks = seq(0, 1440, by = 60),
+          labels = seq(0, 24, by = 1),
+          limits = c(0, 1440)
+        )
+        # Changes y scale
+        p <- p + scale_y_continuous(
+          limits = c(-1, 75),
+          breaks = seq(0, 75, by = 10)
+        )
         #Converts ggplot to plotly for interactivity
         p <- ggplotly(p)
         #Disables zoom and drag
         p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
         return(p)
-      }
-      
-      if (PowerProduction()) {
-        if (PowerProduction()) {
-          # Detrend the data
-          PowerProduction_sensor <- filtered_data[, column_name] * 0.20
-          
-          #Converts to manipulable data
-          p_data <- data.frame(MINUTE = filtered_data$MINUTE, PowerProductionValue = PowerProduction_sensor)
-          
-          # Create the plot with MINUTE on the X-axis and PowerProduction sensor irradiance on the Y-axis
-          p <- ggplot(data = p_data, aes(x = MINUTE, y = PowerProductionValue)) +
-            geom_line() +
-            labs(
-              title = paste(marker_label, "Power Production", format(input$Date, "%m-%d-%Y")),
-              x = "Time (Hours)",
-              y = paste(marker_label, "Power Production (W)")
-            )
-          #Changes x scale
-          p <- p + scale_x_continuous(
-            breaks = seq(0, 1440, by = 60),
-            labels = seq(0, 24, by = 1),
-            limits = c(0, 1440)
-          )
-          #Converts ggplot to plotly for interactivity
-          p <- ggplotly(p)
-          p <- p %>% layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
-          return(p)
-        }
-        #If button is not in PowerProduction state
+        #If not in PowerProduction state, plot regular data
       } else {
-        # Use trended data (no detrending)
-        # Create the plot with MINUTE on the X-axis and sensor irradiance on the Y-axis
+        #Creates plot
         p <- ggplot(data = filtered_data, aes(x = MINUTE, y = .data[[column_name]])) +
           geom_line() +
           labs(
@@ -985,10 +975,10 @@ server <- function(input, output, session) {
           labels = seq(0, 24, by = 1),
           limits = c(0, 1440)
         )
-        #Changes y scale
+        # Changes y scale
         p <- p + scale_y_continuous(
-          limits = c(-10, max(filtered_data[column_name], 550)),
-          breaks = seq(0, max(filtered_data[column_name], 550), by = 100)
+          limits = c(0, 1000),
+          breaks = seq(0, 1000, by = 100)
         )
         #Converts ggplot to plotly for interactivity
         p <- ggplotly(p)
@@ -1115,9 +1105,9 @@ server <- function(input, output, session) {
     monthly_sum <- total_production()$monthly
     
     HTML(paste(
-      "The West Tennessee Solar Farm has powered", floor(daily_sum / 30), "houses today.",
-      "The West Tennessee Solar Farm has powered", floor(weekly_sum / 30), "houses in the past 7 days.",
-      "The West Tennessee Solar Farm has powered", floor((weekly_sum * 4) / 30), "houses in the past 31 days."
+      "The West Tennessee Solar Farm has powered", floor(daily_sum / 60 / 30), "houses or ", floor(daily_sum / 60 / 11.81), " electric cars today.",
+      "The West Tennessee Solar Farm has powered", floor(weekly_sum / 60 / 30), "houses or ", floor(weekly_sum / 60 / 11.81), " electric cars in the past 7 days.",
+      "The West Tennessee Solar Farm has powered", floor((weekly_sum * 4) / 60 / 30), "houses or ", floor((weekly_sum * 4) / 60 / 11.81), " electric cars in the past 31 days."
     ))
   })
   #When closing out of the browser, the app automatically stops
