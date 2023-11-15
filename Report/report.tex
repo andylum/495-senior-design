@@ -76,7 +76,7 @@
 % Paper metadata (use plain text, for PDF inclusion and later
 % re-using, if desired).  Use \emtpyauthor when submitting for review
 % so you remain anonymous.
-\def\plaintitle{Revitalizing Solar Insights: A Dashboard for West Tennessee Solar Farm}
+\def\plaintitle{Revitalizing Solar Insights:\\ A Dashboard for West Tennessee Solar Farm}
 \def\plainauthor{Joshua Chamberlain, Andy Lum}
 \def\emptyauthor{}
 \def\plainkeywords{Authors' choice; of terms; separated; by
@@ -156,7 +156,7 @@ Our dashboard incorporates an export function, enabling users to extract data. I
 
 \section{Introduction}
 
-In the pursuit of sustainable energy solutions, our project ventures to unlock the vast potential of solar irradiance data. Our focus is on the West Tennessee Solar Farm, situated near Stanton, TN \cite{WTSF}. Its strategic proximity to Blue Oval City adds notable importance. The critical challenge we address is the current, non-functional existing dashboard for the solar farm, which has left vital solar irradiance data inaccessible for potential users. The West Tennessee Solar Farm offers the potential for abundant clean energy, but its potential remains unrealized in part due to the limitations of the existing dashboard. In this project, we aspire to bridge this data accessibility gap while opening up opportunities to inform and educate the general public about the farm's renewable energy potential.
+In the pursuit of sustainable energy solutions, our project ventures to unlock the vast potential of solar irradiance data. Our focus is on the West Tennessee Solar Farm, situated near Stanton, TN \cite{9_WTSF}. Its strategic proximity to Blue Oval City adds notable importance. The critical challenge we address is the current, non-functional existing dashboard for the solar farm, which has left vital solar irradiance data inaccessible for potential users. The West Tennessee Solar Farm offers the potential for abundant clean energy, but its potential remains unrealized in part due to the limitations of the existing dashboard. In this project, we aspire to bridge this data accessibility gap while opening up opportunities to inform and educate the general public about the farm's renewable energy potential.
 
 In response to this need, our project emerges as a symbol of innovation and accessibility, seamlessly integrating an array of cutting-edge technologies. With MySQL as our data hub, we thoroughly organize solar energy data by sensor location. Python, in collaboration with the Google Drive API, takes on the role of capturing and decoding real-time data with unwavering precision. However, the importance of our project lies in R-Shiny dashboard, an interactive interface that goes beyond the typical data visualization. It not only brings solar irradiance data to life in real-time but also empowers users with interactive maps, intricate sensor insights, information that is relatable to the lay-person, and a comprehensive historical archive.
 
@@ -168,7 +168,27 @@ This challenge serves as the stimulus for our proactive engagement with this pro
 
 Our interactive dashboard not only addresses the immediate needs of the solar farm but also extends its utility to education and research purposes. With this tool, we enable students, researchers, and the general public to gain insightful access to real-time solar irradiance data. This not only empowers them to better understand and appreciate the significance of renewable energy but also fosters a collaborative environment where valuable insights can be shared and applied. Whether for educational institutions or research facilities, our interactive dashboard serves as an invaluable resource for learning, innovation, and informed decision-making in the pursuit of sustainable energy solutions.
 
-
+Unfortunately , the dashboard was not able to put onto the website due to legal constraints. The proof of concept for the dashboard will provide a template for other solar farms to be able to connect the citizens they power to the critical information needed. Furthermore, it educates the public on how the solar power process works. The educational and research benefits still provide multiple benefits to the community surround any solar farm.
+\section{Key Terms}
+As the project deals with the solar plant process, this report will contain many terms pertaining to the solar power process of collecting energy and sending that power to the electrical grid. Some key terms you may need to know include:
+\begin{itemize}
+    \item[1.] \textbf{Irradiance}
+    \begin{itemize}
+        \item The energy per meter squared received from the sun in the form of electromagnetic radiation.
+    \end{itemize}
+    \item[2.] \textbf{Solar Farm Efficiency Factor}
+    \begin{itemize}
+        \item A measure of how effectively a solar farm converts received sunlight into usable electrical energy.
+    \end{itemize}
+    \item[3.] \textbf{Angle of Incidence}
+    \begin{itemize}
+        \item The angle at which sunlight strikes a surface, affecting the efficiency of solar energy absorption.
+    \end{itemize}
+    \item[4.] \textbf{GGPlot}
+    \begin{itemize}
+        \item A Grammar for Graphics Plot (GGPlot) is a plot that allows for customization of plots through the Grammar for Graphics principles.
+    \end{itemize}
+\end{itemize}
 \section{Technologies Used}
 
 \subsection{MySQL}
@@ -180,46 +200,83 @@ The MySQL database was used to store information about irradiance collected from
 \item[4.] The total irradiance of all sensors.
 \end{itemize}
 
+The reason the project used MySQL was because it is a lightweight database that is free. Furthermore, the user interface of mySQL workbench allowed for quick and easy queries and data visualization of the data table.
 \subsection{Python}
-The python program uses the mysql library\cite{MySQL} to connect to the database and retrieve data from the database. It gets the information at a rate of 1 minute, providing real time updates to the R-Shiny dashboard. It does this by creating a query that is then executed on the database.
+The Python component of the data pipeline plays a pivotal role in facilitating the seamless flow of real-time information from the MySQL database to the R-Shiny dashboard. Utilizing the MySQL library\cite{5_MySQL}, the Python program establishes a connection with the solar farm's database and initiates a systematic retrieval of data at regular one-minute intervals. This periodic extraction aligns with the continuous data collection carried out by the sensors.
+
+The Python script's functionality extends to the formulation and execution of optimized queries, precisely tailored to fetch relevant data from the MySQL database. Subsequently, the retrieved data undergoes a meticulous transformation process, culminating in its storage within a CSV file hosted on Google Drive. This strategically positioned CSV file serves as a dynamic conduit, ensuring a consistent inflow of updated information to the R-Shiny dashboard. In essence, the Python program functions as a sophisticated data intermediary, bridging the gap between the solar farm's database and the real-time visualization presented on the dashboard.
 
 \subsection{R-Shiny}
-Through multiple packages, R-Shiny is used to perform statistical analyses and to plot both power production and irradiance. It also holds the code for the user interface and performs the conversion between irradiance and power production. 
+Employing a diverse array of packages, R-Shiny assumes a crucial role in executing intricate statistical analyses and generating visual representations of power production and irradiance within the solar farm data project. Within this framework, the code is intricately woven to design a user interface and seamlessly facilitate the conversion processes between irradiance and power production. The various R-Shiny packages not only facilitate statistical computations but also empower the system to dynamically plot and illustrate the nuanced relationship between power production and irradiance. This strategic integration of R-Shiny underscores its versatility and indispensability in the comprehensive functionality of the solar farm data dashboard, aligning cohesively with the technical intricacies of our project.
 
 \subsection{ShinyApps.io} 
-ShinyApps.io is used to host the dashboard as a website on the cloud. It gives access to the dashboard for the public. This is essential since one of the main goals of the project is to make it an educational tool as well as a research tool. It uses the Posit Cloud, which is the main cloud server for R-Shiny programs.
+ShinyApps.io serves as a pivotal platform for hosting our innovative solar farm data dashboard in the cloud. As a cloud-based service, ShinyApps.io enables us to make the dashboard publicly accessible, aligning with our project's goal to not only serve as a research tool but also as an educational resource. Operating on the Posit Cloud, which is our chosen primary server for R-Shiny programs, ShinyApps.io facilitates the deployment of our live dashboard with efficiency and reliability. This decision reflects our commitment to providing a seamless and widespread user experience, essential for both educational outreach and scientific exploration.
+
+In operation, ShinyApps.io functions as a cloud-hosting service that allows R-Shiny applications, like our solar farm dashboard, to be deployed online. The Posit Cloud, integrated as the primary server, ensures the continuous availability and scalability of our dashboard. 
+
+ShinyApps.io works by allowing users to access and interact with the solar farm data remotely through a web interface. This cloud-based approach enables all the necessary dashboard features as well as making it available to as many users as possible.
 
 \subsection{Google Cloud Console}
-Google Cloud Console is used to secure the data being transferred to the website. It protects it by masking passwords and API keys to the database and the APIs being used.
+The utilization of the Google Cloud Console plays a pivotal role in fortifying the security measures implemented for the data transmission to the website. This platform functions as a robust shield, safeguarding sensitive information such as passwords and API keys during the interaction with both the database and the utilized APIs. Through meticulous encryption and secure protocols, the console ensures that these crucial authentication elements remain obfuscated, minimizing the risk of unauthorized access and potential vulnerabilities. By meticulously concealing the authentication credentials, the Google Cloud Console contributes significantly to the overall data integrity and confidentiality, aligning seamlessly with the stringent security standards requisite in the realm of computer science. This deliberate approach towards safeguarding the data transfer process underscores the commitment to maintaining a secure and resilient infrastructure for the seamless operation of the solar farm data dashboard.
 
 \section{R Packages}
 R packages play a pivotal role in bringing the solar farm data dashboard to life. R packages are collections of functions, documentation, and sample data bundled together for specific tasks or purposes. In the project, several key R packages have been harnessed to create a robust and interactive dashboard, catering to the real-time needs of the solar farm data:
 
 \subsection{Shiny}
 
-Shiny is an R package used to bridge the gap between R and HTML. It was used to design the UI of the dashboard as well as connecting the data collected from the MySQL database to the R program. Finally, it allowed reactivity in the R program, making real time data visualization possible.\cite{R-Shiny}\cite{Wickham_2021}
+Shiny is an R package used to bridge the gap between R and HTML. It was used to design the UI of the dashboard as well as connecting the data collected from the MySQL database to the R program. Finally, it allowed reactivity in the R program, making real time data visualization possible.\cite{10_R-Shiny}\cite{2_Wickham_2021}
 
 \subsection{Leaflet}
 
-Leaflet is used to provide the map and all of its functionalities. It uses the satellite photos from the USGS (United States Geological Survey) for the interactive picture of the solar farm. Leaflet also contributed to the popups and zoom features of the map, allowing the user to have easy access to information from each sensor.\cite{Leaflet}
+Leaflet is used to provide the map and all of its functionalities. It uses the satellite photos from the USGS (United States Geological Survey) for the interactive picture of the solar farm. Leaflet also contributed to the popups and zoom features of the map, allowing the user to have easy access to information from each sensor.\cite{4_Leaflet}
 
 \subsection{OpenMeteo}
 
-OpenMeteo is an API used for weather forecasting and historical data analysis. It allowed for forecasting the next day on the dashboard. It provided the hourly cloud cover, hourly temperature, weather code, and the amount of shortwave UV radiation. The hourly variables were averaged for user convenience.\cite{OpenMeteo}
+OpenMeteo is an API used for weather forecasting and historical data analysis. It allowed for forecasting the next day on the dashboard. It provided:
+\begin{itemize}
+    \item Hourly Cloud Cover (\%)
+    \item Hourly Temperature ($^{\circ}$F)
+    \item Hourly Weather Codes
+    \item Sum of Daily Shortwave Radiation ($\dfrac{W}{m^2}$)
+\end{itemize} 
+The hourly variables were averaged for user convenience.\cite{6_OpenMeteo}
 
 \subsection{Google Drive}
-The google drive package allows the program to connect to google drive files. It is used to connect to the csv file that contains all the processed data for the dashboard plots and sensor information.\cite{GD}
+The google drive package allows the program to connect to google drive files. It is used to connect to the csv file that contains all the processed data for the dashboard plots and sensor information.\cite{1_GD}
 
 \subsection{Rsconnect}
-The rsconnect package connects the R-shiny application to shinyapps.io server. \cite{RSConnect}
+The rsconnect package connects the R-shiny application to shinyapps.io server. \cite{7_RSConnect}
 
 \subsection{GGPlot2 and Plotly}
-GGPlot2 and Plotly allows for the interactivity in the plots. It allows the user to hover over the plot and see the minute the data was gathered and the irradiance at that time. It also allows null data to be absent from the dataset. 
+GGPlot2 and Plotly allows for the interactivity in the plots. It allows the user to do a variety of functionalities, live with the data. It fades out to refresh as well giving a visual indication when it is updating.
+
+\subsubsection{Plot Functionalities}
+\begin{itemize}
+    \item[1.] \textbf{Interactivity}\\
+    The plots are able to detect the position of the mouse on the plot and determine what MINUTE value and the current irradiance at that value it is currently. It has a labeled text box follow the user's mouse in the following format: MINUTE: {User's minute} Irradiance: {User's irradiance}.
+    \item[2.] \textbf{Picture a Certain Moment}\\
+    There is a button in the top right of the plot that looks like a camera. This allows the user to take a picture of the plot and saves the picture as an PNG to the user's local computer.
+    \item[3.] \textbf{Null Data Values}\\
+    The plot will take null data values. This is important because solar panels have a variety of reasons to be down. For example, a solar panel could be down for maintenance. The plot should not show 0 because it is not collecting, thus the plot is very helpful. Finally, this also provides a quick visual representation for the user.
+\end{itemize}
+
+GGPlot works by taking the base plot of R and adding layers onto the graph. Adding layers to the graph allow for more freedom in customization. 
+\section{Project Goals}
+Using the technologies mentioned above and their functions, we want to implement:
+\subsection{Streamlined Data Pipeline}
+The optimal data pipeline would be:
+mySQL $\xrightarrow{}$ Python $\xrightarrow{}$ Google Drive CSV $\xrightarrow{}$ Dashboard.
+Optimizing the data pipeline allows for real time reactive data. The mySQL database would store the data. Then the python script would then execute queries in order to retrieve the data and update the Google Drive CSV. The Google Drive CSV would hold the data in a format readable by the R-shiny dashboard. Finally, the dashboard reads the data and reacts accordingly.
+\subsection{Continuous Data Maintenance}
+A key objective of the project involves the ongoing monitoring of data, incorporating a visual mechanism to flag instances of "bad" data. An illustrative scenario is the need for solar panel sensors to undergo maintenance, during which the collected data should register as NULL rather than zero. This meticulous approach to data maintenance extends to the graphical representations, ensuring that both plots and maps accurately reflect periods of sensor downtime due to maintenance activities. By implementing this nuanced strategy, the project aims to sustain a high level of data integrity, providing a comprehensive and accurate depiction of the solar farm's operational status.
+\subsection{R-Shiny Dashboard}
+The dashboard will be user friendly and be able to be used for educational purposes. The features mentioned later in the paper will also be fully functional and reactive.
+\subsection{Cross-Platform Accessibility}
+The dashboard is meant to be used as an educational tool for students and interested parties. In order to help provide this information to as many people as possible, the dashboard is planned to be accessible on all popular operating systems. In particular, the dashboard will be available to Linux, MacOs, and Windows users.
 
 \section{Initial Mockup}
 \includegraphics[scale = 0.3]{Initial Mockup.pdf}
 \label{fig:initial-mockup}
-
 
 \subsection{Initial Features}
 The initial features of the first mockup includes:
@@ -238,29 +295,44 @@ Throughout the design process many features have either been added or removed.
 \subsection{Finalized Dashboard}
 \includegraphics[scale = 0.18]{Thumbnail.png}
 \subsection{Reactive Plots}
-The dashboard's main feature is the reactive plots that show the current irradiance level or power production. The plots are able to change from live plot to daily plots. Also within the daily plots, the plots can switch between irradiance and power production. It does this using a formula gathered through scientific study.\cite{PowerConversion}
+The dashboard's main feature is the reactive plots that show the current irradiance level or power production. The plots are able to change from live plot to daily plots. Also within the daily plots, the plots can switch between irradiance and power production. It does this using a formula gathered through scientific study.\cite{8_PowerConversion}
+
+This works by making two vectors, the MINUTE and the current irradiance or power production. Then it takes the vectors and plots it using MINUTE as the x-axis and the irradiance or power production as the y-axis. It takes the scatter plot and connects the data values to create a line using the geom\_line function. Next, it takes the adjusts the x and y axes and adjust them to the specified parameters. Finally, it converts the ggplot to a plotly so it can be properly displayed on the dashboard.
 
 \subsection{Interactive Map}
-The map that shows the West Tennessee Solar Farm\cite{WTSF} from an ariel view. It has clickable sensors that pop-up with the current irradiance value at that time. The sensors change colors when one is abnormally low or abnormally high. It is colored based on a red to green gradient.\ref{fig:initial-mockup} The map also has the capability to zoom in and out. All of the interactivity and reactivity within the map was made using the Leaflet package.\cite{Leaflet}
+The map that shows the West Tennessee Solar Farm\cite{9_WTSF} from an ariel view. It has clickable sensors that pop-up with the current irradiance value at that time. The sensors change colors when one is abnormally low or abnormally high. It is colored based on a red to green gradient.\ref{fig:initial-mockup} The map also has the capability to zoom in and out. All of the interactivity and reactivity within the map was made using the Leaflet package.\cite{4_Leaflet} 
+
+The leaflet map works similiar to the reactive plots. It is based on the base map provided by USGS. It adds layers onto it based on the parameters set. The two layers added onto the map were the markers and the popup. 
 
 \subsection{Weather Forecast Table}
-The dashboard has a weather forecast for the next day. It gives the cloud cover, temperature, weather code, and total predicted shortwave ultraviolet radiation. This allows not only users to know the predicted forecast, it also allows the West Tennessee Solar Farm to plan storage based on how much power the farm will have to supplement the main power supply.
+The dashboard has a weather forecast for the next day. It gives the cloud cover, temperature, weather code, and total predicted shortwave ultraviolet radiation. This allows not only users to know the predicted forecast, it also allows the West Tennessee Solar Farm to plan storage based on how much power the farm will have to supplement the main power supply. 
+
+OpenMeteo works by taking the parameters given in its program, such as location, and cloud cover. It then takes the parameters and retrieves the data from its database. Next it takes the data and puts it into a readable JSON (JavaScript Object Notation) file. Finally, R-shiny takes the JSON file and uses the tableOutput function to create a readable table on the dashboard.
+
+Although, OpenMeteo provides much more information, to keep the information concise for the readability to the user the decision was made to only provide the most prominent factors affect the total irradiance and power production.
 
 \subsection{Exporting Daily Data}
-The dashboard has a button to download the specific days data the user is looking at as a csv. This is achieved using the downloadHandler in Shiny.\cite{R-Shiny} Pressing the button will pop up with a "Save As" screen on the users local computer. By default it will name the file in the format, mm-dd-yyyy.csv, where the date is the current days plot the user is looking at.
+The dashboard has a button to download the specific days data the user is looking at as a csv. This is achieved using the downloadHandler in Shiny.\cite{10_R-Shiny} 
+
+Pressing the button will pop up with a "Save As" screen on the users local computer. By default it will name the file in the format, mm-dd-yyyy.csv, where the date is the current days plot the user is looking at.
 
 \subsection{Educational Features}
-The dashboard has two educational sections. The first section is a description of what irradiance is. The second section contains reactive text that converts the total power production to more relatable units: amount of houses powered and how many electric cars are being powered. This calculated for the day, week, and month.
+The dashboard has two educational sections. The first section is a description of what irradiance is. The second section contains reactive text that converts the total power production to more relatable units: amount of houses powered and how many electric cars are being powered. This is calculated for the day, week, and month. 
 
+The two educational section provides not only an educational benefit, but it also eases the transition of newcomers to understand the information being presented to them.
 \section{Other Features}
 Along with the dashboard there are two other tabs.
 \subsection{Solar Power Process}
-The tab explains in a simple format how the solar panels collect sunlight and convert it to power. It uses the fade in CSS animation to keep users engaged. It is meant to serve as an education and research tool for the public outreach and awareness.
+The tab explains in a simple format how the solar panels collect sunlight and convert it to power. It uses the fade in CSS animation to keep users engaged. It is meant to serve as an education and research tool for the public outreach and awareness. Using the UTM colors alternately, the tab looks like this:\\\\
+\includegraphics[scale = 0.18]{Solar Panel Process.png}
 \subsection{Frequently Asked Questions}
-The tab answers Frequently Asked Questions about solar farms and the solar power process. 
+The tab answers Frequently Asked Questions about solar farms and the solar power process. The tab also has clickable buttons that using CSS automatically scrolls down to the appropriate category of questions. The tab looks like this:\\\\
+\includegraphics[scale = 0.18]{FAQ.png}
 
 \section{Power Conversion Formula}
-The dashboard has the functionality for the data to be converted from irradiance in $\dfrac{W}{m^2}$ to total power production in $kWh$. Due to certain factors, such as the angle of the rays, the angle of the panel, the amount of interference and a particular solar's farm efficiency factor, the irradiance to power production conversion is fascinating formula. Through a study in the \emph{Renewable and Sustainable Energy Reviews} in 2022\cite{PowerConversion}, found that taking into all of these factors, and simplifying it down to a reasonable level the formula was as follows: Power Production $\approx -0.038 + 0.0058 * Current Irradiance$. For lower values this would result in a measure less than 0. We com batted this by using the following R code: max(0, -0.038 + 0.0058 * Current Irradiance). This data assumes that the angle of the solar panel, the angle of the UV rays, and the solar farm efficiency factor has been taken into account. 
+The data presented on the R-Shiny dashboard undergoes a crucial transformation to convert irradiance measurements, expressed in $\dfrac{W}{m^2}$, into a more meaningful metric: total power production, measured in $kWh$. This conversion is intricate, considering various environmental factors that influence solar energy generation. The formula employed for this conversion, as derived from a comprehensive study published in the \emph{Renewable and Sustainable Energy Reviews} in 2022\cite{8_PowerConversion}, intricately accounts for the nuanced interplay of factors such as the angle of incidence, the orientation of the solar panels, potential interference, and the solar farm's efficiency factor.
+
+The empirical formula obtained from the study is articulated as follows: Power Production $\approx -0.038 + 0.0058 \times \text{Current Irradiance}$. The nuanced nature of this formula necessitates a comprehensive adjustment to ensure that resulting power production values do not fall below zero, particularly for lower irradiance values. To address this, a safeguard mechanism is implemented in the form of the following R code: \texttt{max(0, -0.038 + 0.0058 * Current Irradiance)}. This ensures that the converted power production values remain non-negative, reflecting a realistic and feasible representation of solar energy output, accounting for the intricacies of panel orientation, solar radiation angles, and the inherent efficiency of the solar farm.
 
 % ``Quotation Example''
 
@@ -283,6 +355,41 @@ The dashboard has the functionality for the data to be converted from irradiance
 %\texttt{{\textbackslash}hyperref} package allows you to create well tagged PDF files,
 %please see the preamble of this template for an example.
 
+\section{Challenges}
+As our first experience with R-shiny was the dashboard, there were many challenges while implementing features and dealing with the interactivity between the mySQL database, the python script, the Google Drive CSV, and the R-shiny dashboard. 
+
+\subsection{Streamlined Data Pipeline}
+As stated in the project goals, the data pipeline had to be optimized in order to have the most accurate reactive data on the dashboard. This was optimized through the python module \textbf{mysql}\cite{5_MySQL}. Using the module, after connecting to the mySQL database, the program executes a query to get the next minute of data after a specified amount of time.
+\subsection{Error Handling}
+As stated in the project goals, error handling provides a visual cue to the user for abnormal data or abnormal circumstances. Although making the visual cue a singular color would have been easier, the plan was to not only have a visual cue, but to further the user experience by having the color represent the intensity of the circumstance.The eventual solution was to have a color gradient to representing the intensity of the problem. 
+
+All the intensities are based on the differences between each of the sensors. The sensors will a muted green, showing less color to the user representing a lower irradiance value.
+
+The reason for having the color based on the differences between each of the sensors is because during the night, all sensors produce little energy. If the intensity was based on the current irradiance value, it would create a false negative for all sensors while the sun is not visible. 
+
+\subsection{Webpage Development}
+The dashboard is meant to be an educational tool, so the dashboard needed to be as accessible as possible. Typically, there are three different options:\\
+\subsubsection{ShinyApps.io}
+\emph{ShinyApps.io} is a web platform leveraging cloud technology for the efficient publication of Shiny apps. This service streamlines the deployment process, providing users with a publicly accessible link for their applications. Notably, \emph{ShinyApps.io} integrates seamlessly with R-Studio, enhancing the development and deployment workflow within the R programming environment. Furthermore, the platform offers a free tier, allowing users to host their apps for up to 25 hours per month. This resource allocation makes \emph{ShinyApps.io} a practical and cost-effective solution.\cite{3_App_Distribution}
+\subsubsection{Shiny Server} A shiny server is a web server for the explicit use of shiny applications. Although this allows for more customization in how the app the published, it also requires having an enterprise backend database, and it is not free as well.\cite{3_App_Distribution}
+\subsubsection{Shiny Proxy}
+A shiny proxy server is used for enterprise applications. It takes a user accessing the shiny application and creates a separate session for each user. Although this is the best option in terms of scalability, it requires a lot of RAM as well as requiring lots of money to keep the server running.\cite{3_App_Distribution}
+
+ After carefully considering the pros and cons of each option, it was ultimately decided that the project was to be deployed using shinyapps.io. The decision was made due to the ease of setting up as well as meeting our financial and accessibility needs.
+
+\section{Future Work}
+While the current dashboard boasts extensive functionality, there exist opportunities for enhancements and additions in the future.
+
+\begin{itemize}
+    \item[1.] \textbf{Predictive Analysis}\\
+    Implementing machine learning algorithms to predict power production for the upcoming day could significantly benefit the project. This predictive capability would enable a more refined optimization of the energy balance between supplying the West Tennessee Solar Farm and contributing excess power to the main grid. Maximizing supplemental power has broader implications, potentially influencing economic factors by affecting power prices based on supply and demand dynamics.
+
+    \item[2.] \textbf{Push Notifications}\\
+    Given the substantial impact of the West Tennessee Solar Farm on local communities, timely notifications are crucial. Introducing push notifications for scenarios where data is null or exhibits unusually low values (deviating beyond two standard deviations from the norm) would allow affected parties to prepare promptly. For instance, the Ford factory employees in Blue Oval City, relying on the solar farm's power supplementation, would benefit from immediate awareness in case of critical information.
+
+    \item[3.] \textbf{On-boarding Video}\\
+    Recognizing the dual role of the dashboard as both an educational and research tool, ensuring user comprehension is essential. Many users may lack familiarity with solar farm operations, posing a potential barrier to understanding the dashboard's features. Incorporating an on-boarding video into the interface would provide newcomers with a guided introduction, facilitating a better understanding of all available features.
+\end{itemize}
 
 \section{Conclusion}
 
